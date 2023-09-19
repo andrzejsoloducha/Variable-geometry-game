@@ -3,15 +3,16 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 72922ab41e7dd4348a6bed1e9720b1d1, type: 3}
   m_Name: Perlin Noise Smooth
   m_EditorClassIdentifier: 
-  algorithm: 1
+  algorithm: 2
   randomSeed: 0
   seed: 1.25
   fillAmount: 0
@@ -24,4 +25,4 @@ MonoBehaviour:
   roughness: 0
   windyness: 0
   edgesAreWalls: 0
-  modifier: 0
+  modifier: 0.0001
