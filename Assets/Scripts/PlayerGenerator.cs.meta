@@ -3,7 +3,9 @@ guid: a6156789be09bae498bf293c153ac394
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - tilemap: {instanceID: 0}
+  - playerPrefab: {fileID: 8785844599905495616, guid: b7bdd095616daf34093e9a9988a07ce8, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

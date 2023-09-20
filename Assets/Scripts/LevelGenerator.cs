@@ -10,8 +10,8 @@ public class LevelGenerator : MonoBehaviour
     public Tilemap tilemap;
     public TileBase tile;
 
-    public int width = 100;
-    public int height = 60;
+    public int width = 60;
+    public int height = 40;
 
     void Start()
     {
@@ -20,7 +20,7 @@ public class LevelGenerator : MonoBehaviour
         float seed = Time.time;
 
         map = MapFunctions.GenerateArray(width, height, true);
-        map = MapFunctions.PerlinNoiseCave(map, Random.Range(0.0001f, 0.3f), true);
+        map = MapFunctions.PerlinNoiseCave(map, Random.Range(0.0001f, 0.4f), true);
 
 
         //Render the result
