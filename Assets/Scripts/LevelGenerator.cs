@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+<<<<<<< HEAD
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -109,6 +110,27 @@ public class LevelGenerator : MonoBehaviour {
 				map = MapFunctions.DirectionalTunnel(map, mapSetting.minPathWidth, mapSetting.maxPathWidth, mapSetting.maxPathChange, mapSetting.roughness, mapSetting.windyness);
 				break;
 		}
+=======
+
+public class LevelGenerator : MonoBehaviour {
+
+	public Tilemap tilemap;
+	public TileBase tile;
+
+	public int width = 100;
+	public int height = 60;
+	
+	void Start()
+	{
+		ClearMap();
+		int[,] map = new int[width, height];
+		float seed = Time.time;
+
+		map = MapFunctions.GenerateArray(width, height, true);
+		map = MapFunctions.PerlinNoiseCave(map, Random.Range(0.0001f, 0.3f), true);
+				
+		
+>>>>>>> map_generator
 		//Render the result
 		MapFunctions.RenderMap(map, tilemap, tile);
 	}
@@ -118,6 +140,7 @@ public class LevelGenerator : MonoBehaviour {
 		tilemap.ClearAllTiles();
 	}
 }
+<<<<<<< HEAD
 
 [CustomEditor(typeof(LevelGenerator))]
 public class LevelGeneratorEditor : Editor
@@ -147,3 +170,5 @@ public class LevelGeneratorEditor : Editor
 		}
 	}
 }
+=======
+>>>>>>> map_generator

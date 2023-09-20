@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+<<<<<<< HEAD
 
 /// <summary>
 /// Contains all the important functions for generating maps with tilemaps. 
@@ -18,6 +19,10 @@ public class MapFunctions
     /// <param name="width">How wide you want the array</param>
     /// <param name="height">How high you want the array</param>
     /// <returns>The map array initialised</returns>
+=======
+public class MapFunctions
+{
+>>>>>>> map_generator
     public static int[,] GenerateArray(int width, int height, bool empty)
     {
         int[,] map = new int[width, height];
@@ -37,6 +42,7 @@ public class MapFunctions
         }
         return map;
     }
+<<<<<<< HEAD
     
     /// <summary>
     /// Draws the map to the screen
@@ -97,11 +103,25 @@ public class MapFunctions
                 {
                     tilemap.SetTile(new Vector3Int(x, y, 0), tile);
                     yield return null;
+=======
+
+    public static void RenderMap(int[,] map, Tilemap tilemap, TileBase tile)
+    {
+        tilemap.ClearAllTiles();
+        for (int x = 0; x < map.GetUpperBound(0); x++)
+        {
+            for (int y = 0; y < map.GetUpperBound(1); y++)
+            {
+                if (map[x, y] == 1) // 1 = tile, 0 = no tile
+                {
+                    tilemap.SetTile(new Vector3Int(x, y, 0), tile);
+>>>>>>> map_generator
                 }
             }
         }
     }
 
+<<<<<<< HEAD
     /// <summary>
     /// Same as the Render function but only removes tiles
     /// </summary>
@@ -143,6 +163,18 @@ public class MapFunctions
 
             //Make sure the noise starts near the halfway point of the height
             newPoint += (map.GetUpperBound(1) / 2); 
+=======
+    public static int[,] PerlinNoise(int[,] map, float seed)
+    {
+        int newPoint;
+        float reduction = 0.5f;
+
+        for (int x = 0; x < map.GetUpperBound(0); x++)
+        {
+            newPoint = Mathf.FloorToInt((Mathf.PerlinNoise(x, seed) - reduction) * map.GetUpperBound(1));
+            newPoint += (map.GetUpperBound(1) / 2);
+
+>>>>>>> map_generator
             for (int y = newPoint; y >= 0; y--)
             {
                 map[x, y] = 1;
@@ -151,6 +183,7 @@ public class MapFunctions
         return map;
     }
 
+<<<<<<< HEAD
 	/// <summary>
 	/// Creates a perlin noise overlay that is smoothed by having a set amount of intervals
 	/// </summary>
@@ -227,6 +260,58 @@ public class MapFunctions
 	/// <param name="edgesAreWalls">If set to <c>true</c> edges are walls.</param>
 	/// <returns>The noise cave.</returns>
 	public static int[,] PerlinNoiseCave(int[,] map, float modifier, bool edgesAreWalls)
+=======
+    public static int[,] PerlinNoiseSmooth(int[,] map, float seed, int interval)
+    {
+        if (interval > 1)
+        {
+            int newPoint, points;
+            float reduction = 0.5f;
+
+            Vector2Int currentPos, lastPos;
+
+            List<int> noiseX = new List<int>();
+            List<int> noiseY = new List<int>();
+
+            for (int x = 0; x < map.GetUpperBound(0); x += interval)
+            {
+                newPoint = Mathf.FloorToInt((Mathf.PerlinNoise(x, (seed * reduction))) * map.GetUpperBound(1));
+                noiseY.Add(newPoint);
+                noiseX.Add(x);
+            }
+
+            points = noiseY.Count;
+
+            for (int i = 1; i < points; i++)
+            {
+                currentPos = new Vector2Int(noiseX[i], noiseY[i]);
+                lastPos = new Vector2Int(noiseX[i - 1], noiseY[i - 1]);
+
+                Vector2 diff = currentPos - lastPos;
+                float heightChange = diff.y / interval;
+                float currHeight = lastPos.y;
+
+                for (int x = lastPos.x; x < currentPos.x; x++)
+                {
+                    for (int y = Mathf.FloorToInt(currHeight); y > 0; y--)
+                    {
+                        map[x, y] = 1;
+                    }
+                    currHeight += heightChange;
+                }
+            }
+        }
+        else
+        {
+            map = PerlinNoise(map, seed);
+        }
+
+        return map;
+    }
+
+
+    public static int[,] PerlinNoiseCave(int[,] map, float modifier, bool edgesAreWalls)
+>>>>>>> map_generator
     {
         int newPoint;
         for (int x = 0; x < map.GetUpperBound(0); x++)
@@ -235,6 +320,7 @@ public class MapFunctions
             {
 
                 if (edgesAreWalls && (x == 0 || y == 0 || x == map.GetUpperBound(0) - 1 || y == map.GetUpperBound(1) - 1))
+<<<<<<< HEAD
 				{
 					//Keep the edges as walls
 					map[x, y] = 1; 
@@ -242,6 +328,13 @@ public class MapFunctions
                 else
                 {
                     //Generate a new point using perlin noise, then round it to a value of either 0 or 1
+=======
+                {
+                    map[x, y] = 1;
+                }
+                else
+                {
+>>>>>>> map_generator
                     newPoint = Mathf.RoundToInt(Mathf.PerlinNoise(x * modifier, y * modifier));
                     map[x, y] = newPoint;
                 }
@@ -249,6 +342,7 @@ public class MapFunctions
         }
         return map;
     }
+<<<<<<< HEAD
 
 
 	/// <summary>
@@ -933,3 +1027,6 @@ public class MapFunctions
     }
     
 }
+=======
+}
+>>>>>>> map_generator
