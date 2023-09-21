@@ -35,6 +35,7 @@ public class MapFunctions
                 if (map[x, y] == 1) // 1 = tile, 0 = no tile
                 {
                     tilemap.SetTile(new Vector3Int(x, y, 0), tile);
+                    tilemap.SetColliderType(new Vector3Int(x, y, 0), Tile.ColliderType.Grid);
                 }
             }
         }
