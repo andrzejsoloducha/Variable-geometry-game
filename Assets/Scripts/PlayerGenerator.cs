@@ -10,7 +10,6 @@ public class PlayerGenerator : MonoBehaviour
     public GameObject playerPrefab;
     public Vector3Int cellPosition;
     public int n = 1;
-    public MapFunctions mapFunctions;
 
     private List<Vector3> availablePlaces;
 

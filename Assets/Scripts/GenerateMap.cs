@@ -3,8 +3,36 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class MapFunctions
+
+public class GenerateMap : MonoBehaviour
 {
+
+    public Tilemap tilemap;
+    public TileBase tile;
+
+    public int width = 60;
+    public int height = 40;
+
+
+    void Start()
+    {
+        ClearMap();
+        int[,] map = new int[width, height];
+        float seed = Time.time;
+
+        map = GenerateArray(width, height, true);
+        map = PerlinNoiseCave(map, Random.Range(0.0001f, 0.4f), true);
+
+        RenderMap(map, tilemap, tile);
+    }
+
+
+    public void ClearMap()
+    {
+        tilemap.ClearAllTiles();
+    }
+
+
     public static int[,] GenerateArray(int width, int height, bool empty)
     {
         int[,] map = new int[width, height];
@@ -25,6 +53,7 @@ public class MapFunctions
         return map;
     }
 
+
     public static void RenderMap(int[,] map, Tilemap tilemap, TileBase tile)
     {
         tilemap.ClearAllTiles();
@@ -35,12 +64,11 @@ public class MapFunctions
                 if (map[x, y] == 1) // 1 = tile, 0 = no tile
                 {
                     tilemap.SetTile(new Vector3Int(x, y, 0), tile);
-                    tilemap.SetColliderType(new Vector3Int(x, y, 0), Tile.ColliderType.Grid);
+                    tilemap.SetColliderType(new Vector3Int(x, y, 0), Tile.ColliderType.Sprite);
                 }
             }
         }
     }
-
     public static int[,] PerlinNoise(int[,] map, float seed)
     {
         int newPoint;
@@ -58,6 +86,7 @@ public class MapFunctions
         }
         return map;
     }
+
 
     public static int[,] PerlinNoiseSmooth(int[,] map, float seed, int interval)
     {
