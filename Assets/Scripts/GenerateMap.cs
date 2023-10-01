@@ -9,6 +9,7 @@ public class GenerateMap : MonoBehaviour
 
     public Tilemap tilemap;
     public TileBase tile;
+    
 
     public int width = 60;
     public int height = 40;
