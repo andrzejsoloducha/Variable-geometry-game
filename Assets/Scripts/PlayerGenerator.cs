@@ -44,7 +44,8 @@ public class PlayerGenerator : MonoBehaviour
                 int index = Random.Range(0, availablePlaces.Count);
 
                 Vector3 position = availablePlaces[index];
-                Instantiate(playerPrefab, position, Quaternion.identity);
+                GameObject clonePlayer = Instantiate(playerPrefab, position, Quaternion.identity);
+                clonePlayer.name = "Player" + i;
                 availablePlaces.RemoveAt(index);
             }
             else
