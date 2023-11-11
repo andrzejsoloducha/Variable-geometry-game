@@ -14,8 +14,8 @@ public class Rb_movement : MonoBehaviour
     public int currentPlayer = 0;
     public int maxPlayers;
     public GameObject[] allPlayers;
-    public float turnTime = 30.0f;
-    public float timer = 30.0f;
+    public float turnTime = 5.0f;
+    public float timer = 5.0f;
     private bool actionTaken = false;
 
     public Rigidbody2D rb;
@@ -43,6 +43,8 @@ public class Rb_movement : MonoBehaviour
         if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
         {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
+            //only for tests
+            actionTaken = true;
         }
 
         Flip();
@@ -54,9 +56,7 @@ public class Rb_movement : MonoBehaviour
         }
         else
         {
-            //timer -= Time.deltaTime;
-            //string timerText = string.Format("{0:00}:{1:00}", (int)timer / 60, (int)timer % 60);
-            //timeLeftText.text = timerText;
+            timer -= Time.deltaTime;
         }
     }
 
