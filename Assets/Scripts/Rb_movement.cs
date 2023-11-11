@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 public class Rb_movement : MonoBehaviour
 {
@@ -9,12 +11,28 @@ public class Rb_movement : MonoBehaviour
     private float jumpingPower = 16f;
     private bool isFacingRight = true;
 
-    [SerializeField] private Rigidbody2D rb;
+    public int currentPlayer = 0;
+    public int maxPlayers;
+    public GameObject[] allPlayers;
+    public float turnTime = 30.0f;
+    public float timer = 30.0f;
+    private bool actionTaken = false;
+
+    public Rigidbody2D rb;
+    //[SerializeField] public Text timeLeftText;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
+    
 
+    void Start()
+    {
+        allPlayers = GameObject.FindGameObjectsWithTag("Player");
+        maxPlayers = allPlayers.Length;
+    }
+    
     void Update()
     {
+        rb = allPlayers[currentPlayer].GetComponent<Rigidbody2D>();
         horizontal = Input.GetAxisRaw("Horizontal");
 
         if (Input.GetButtonDown("Jump") && IsGrounded())
@@ -28,6 +46,18 @@ public class Rb_movement : MonoBehaviour
         }
 
         Flip();
+
+        if (timer <= 0 | actionTaken)
+        {
+            EndTurn();
+            SwitchPlayer();
+        }
+        else
+        {
+            //timer -= Time.deltaTime;
+            //string timerText = string.Format("{0:00}:{1:00}", (int)timer / 60, (int)timer % 60);
+            //timeLeftText.text = timerText;
+        }
     }
 
     private void FixedUpdate()
@@ -49,5 +79,23 @@ public class Rb_movement : MonoBehaviour
             localScale.x *= -1f;
             transform.localScale = localScale;
         }
+    }
+
+    void EndTurn()
+    {
+        timer = turnTime;
+        actionTaken = false;
+    }
+
+    void SwitchPlayer()
+    {
+        currentPlayer += 1;
+
+        if (currentPlayer >= maxPlayers)
+        {
+            currentPlayer = 0;
+        }
+
+        Rigidbody rb = allPlayers[currentPlayer].GetComponent<Rigidbody>();
     }
 }
