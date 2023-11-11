@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class Rb_movement : MonoBehaviour
+public class playerActions : MonoBehaviour
 {
     private float horizontal;
     private float speed = 8f;
@@ -14,9 +14,9 @@ public class Rb_movement : MonoBehaviour
     public int currentPlayer = 0;
     public int maxPlayers;
     public GameObject[] allPlayers;
-    public float turnTime = 5.0f;
-    public float timer = 5.0f;
-    private bool actionTaken = false;
+    float turnTime;
+    float currentTime;
+    private static bool actionTaken = false;
 
     public Rigidbody2D rb;
     //[SerializeField] public Text timeLeftText;
@@ -28,6 +28,9 @@ public class Rb_movement : MonoBehaviour
     {
         allPlayers = GameObject.FindGameObjectsWithTag("Player");
         maxPlayers = allPlayers.Length;
+
+        turnTime = GetComponent<turnTimer>().turnTime;
+
     }
     
     void Update()
@@ -49,15 +52,6 @@ public class Rb_movement : MonoBehaviour
 
         Flip();
 
-        if (timer <= 0 | actionTaken)
-        {
-            EndTurn();
-            SwitchPlayer();
-        }
-        else
-        {
-            timer -= Time.deltaTime;
-        }
     }
 
     private void FixedUpdate()
@@ -83,7 +77,7 @@ public class Rb_movement : MonoBehaviour
 
     void EndTurn()
     {
-        timer = turnTime;
+        currentTime = turnTime;
         actionTaken = false;
     }
 
