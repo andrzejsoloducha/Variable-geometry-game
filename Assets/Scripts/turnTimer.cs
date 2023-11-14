@@ -7,26 +7,52 @@ public class turnTimer : MonoBehaviour
 {
     public float turnTime = 5.0f;
     private float currentTime = 0f;
-    private bool actionTaken;
+    public bool actionTaken;
+    public int currentPlayer;
+    private int maxPlayers;
+    private GameObject[] allPlayers;
+    public playerActions playerScript;
 
     [SerializeField] Text timeLeftText;
 
-    // Start is called before the first frame update
     void Start()
     {
         currentTime = turnTime;
+
+        allPlayers = GameObject.FindGameObjectsWithTag("Player");
+        maxPlayers = allPlayers.Length;
+
+        playerScript = GetComponent<playerActions>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         currentTime -= 1 * Time.deltaTime;
         timeLeftText.text = currentTime.ToString("0");
 
-        actionTaken = playerActions.actionTaken
-        if (currentTime <= 0)
+        
+
+        if (currentTime <= 0 | playerScript.actionTaken)
         {
-            currentTime = 0;
+            EndTurn();
+            SwitchPlayer();
+        }
+    }
+
+    void EndTurn()
+    {
+        currentTime = turnTime;
+        actionTaken = false;
+    }
+
+    void SwitchPlayer()
+    {
+        currentPlayer += 1;
+
+        if (currentPlayer >= maxPlayers)
+        {
+            currentPlayer = 0;
         }
     }
 }
+

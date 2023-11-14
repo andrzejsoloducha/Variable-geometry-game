@@ -16,8 +16,9 @@ public class playerActions : MonoBehaviour
     public GameObject[] allPlayers;
     float turnTime;
     float currentTime;
-    private static bool actionTaken = false;
+    public bool actionTaken = false;
 
+    public turnTimer turnScript;
     public Rigidbody2D rb;
     //[SerializeField] public Text timeLeftText;
     [SerializeField] private Transform groundCheck;
@@ -29,13 +30,15 @@ public class playerActions : MonoBehaviour
         allPlayers = GameObject.FindGameObjectsWithTag("Player");
         maxPlayers = allPlayers.Length;
 
-        turnTime = GetComponent<turnTimer>().turnTime;
+        turnScript = GetComponent<turnTimer>();
 
     }
     
     void Update()
     {
-        rb = allPlayers[currentPlayer].GetComponent<Rigidbody2D>();
+        
+        rb = allPlayers[turnScript.currentPlayer].GetComponent<Rigidbody2D>();
+
         horizontal = Input.GetAxisRaw("Horizontal");
 
         if (Input.GetButtonDown("Jump") && IsGrounded())
@@ -47,8 +50,10 @@ public class playerActions : MonoBehaviour
         {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
             //only for tests
-            actionTaken = true;
+            //actionTaken = true;
         }
+
+        turnTime = GetComponent<turnTimer>().turnTime;
 
         Flip();
 
@@ -73,23 +78,5 @@ public class playerActions : MonoBehaviour
             localScale.x *= -1f;
             transform.localScale = localScale;
         }
-    }
-
-    void EndTurn()
-    {
-        currentTime = turnTime;
-        actionTaken = false;
-    }
-
-    void SwitchPlayer()
-    {
-        currentPlayer += 1;
-
-        if (currentPlayer >= maxPlayers)
-        {
-            currentPlayer = 0;
-        }
-
-        Rigidbody rb = allPlayers[currentPlayer].GetComponent<Rigidbody>();
     }
 }
