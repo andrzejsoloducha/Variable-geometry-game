@@ -7,7 +7,7 @@ public class turnTimer : MonoBehaviour
 {
     public float turnTime = 5.0f;
     private float currentTime = 0f;
-    public bool actionTaken;
+
     public int currentPlayer;
     private int maxPlayers;
     private GameObject[] allPlayers;
@@ -30,8 +30,6 @@ public class turnTimer : MonoBehaviour
         currentTime -= 1 * Time.deltaTime;
         timeLeftText.text = currentTime.ToString("0");
 
-        
-
         if (currentTime <= 0 | playerScript.actionTaken)
         {
             EndTurn();
@@ -42,7 +40,7 @@ public class turnTimer : MonoBehaviour
     void EndTurn()
     {
         currentTime = turnTime;
-        actionTaken = false;
+        playerScript.actionTaken = false;
     }
 
     void SwitchPlayer()

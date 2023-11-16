@@ -45,6 +45,7 @@ public class PlayerGenerator : MonoBehaviour
 
                 Vector3 position = availablePlaces[index];
                 GameObject clonePlayer = Instantiate(playerPrefab, position, Quaternion.identity);
+                Rigidbody2D playerRigidbody2D = clonePlayer.AddComponent<Rigidbody2D>();
                 clonePlayer.name = "Player" + i;
                 availablePlaces.RemoveAt(index);
             }

@@ -11,11 +11,9 @@ public class playerActions : MonoBehaviour
     private float jumpingPower = 16f;
     private bool isFacingRight = true;
 
-    public int currentPlayer = 0;
     public int maxPlayers;
     public GameObject[] allPlayers;
-    float turnTime;
-    float currentTime;
+
     public bool actionTaken = false;
 
     public turnTimer turnScript;
@@ -52,8 +50,6 @@ public class playerActions : MonoBehaviour
             //only for tests
             //actionTaken = true;
         }
-
-        turnTime = GetComponent<turnTimer>().turnTime;
 
         Flip();
 
