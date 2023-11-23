@@ -41,7 +41,7 @@ public class playerActions : MonoBehaviour
             int currPlayer = scTimer.currentPlayer;
         } else
         {
-            Debug.Log("No game object called turnScript found");
+            Debug.Log("No game object called scTimer found");
         }
         
         rb = allPlayers[currPlayer].GetComponent<Rigidbody2D>();
