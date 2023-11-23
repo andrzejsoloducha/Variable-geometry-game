@@ -16,7 +16,9 @@ public class playerActions : MonoBehaviour
 
     public bool actionTaken = false;
 
-    public turnTimer turnScript;
+    public GameObject turnScript;
+    public turnTimer scTimer;
+    private int currPlayer = 0;
     public Rigidbody2D rb;
     //[SerializeField] public Text timeLeftText;
     [SerializeField] private Transform groundCheck;
@@ -28,14 +30,21 @@ public class playerActions : MonoBehaviour
         allPlayers = GameObject.FindGameObjectsWithTag("Player");
         maxPlayers = allPlayers.Length;
 
-        turnScript = GetComponent<turnTimer>();
+        GameObject turnScript = GameObject.Find("turnTimer");
+        turnTimer scTimer = turnScript.GetComponent<turnTimer>();
 
     }
     
     void Update()
     {
+        if (scTimer) {
+            int currPlayer = scTimer.currentPlayer;
+        } else
+        {
+            Debug.Log("No game object called turnScript found");
+        }
         
-        rb = allPlayers[turnScript.currentPlayer].GetComponent<Rigidbody2D>();
+        rb = allPlayers[currPlayer].GetComponent<Rigidbody2D>();
 
         horizontal = Input.GetAxisRaw("Horizontal");
 
