@@ -20,35 +20,40 @@ public class playerActions : MonoBehaviour
     public turnTimer scTimer;
     private int currPlayer = 0;
     public Rigidbody2D rb;
-    //[SerializeField] public Text timeLeftText;
-    [SerializeField] private Transform groundCheck;
-    [SerializeField] private LayerMask groundLayer;
-    
+    public bool grounded;
+
+    public Vector2 boxSize = new Vector2(0.8f, 0.2f);
+    public float castDistance = 0.5f;
+    public LayerMask groundLayer;
+
 
     void Start()
     {
         allPlayers = GameObject.FindGameObjectsWithTag("Player");
         maxPlayers = allPlayers.Length;
 
+        groundLayer = LayerMask.GetMask("Ground");
+
         GameObject turnScript = GameObject.Find("turnTimer");
         turnTimer scTimer = turnScript.GetComponent<turnTimer>();
-
     }
-    
+
     void Update()
     {
-        if (scTimer) {
+        if (scTimer)
+        {
             int currPlayer = scTimer.currentPlayer;
-        } else
+        }
+        else
         {
             Debug.Log("No game object called scTimer found");
         }
-        
+
         rb = allPlayers[currPlayer].GetComponent<Rigidbody2D>();
 
         horizontal = Input.GetAxisRaw("Horizontal");
 
-        if (Input.GetButtonDown("Jump") && IsGrounded())
+        if (Input.GetButtonDown("Jump") && isGrounded())
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
         }
@@ -56,8 +61,6 @@ public class playerActions : MonoBehaviour
         if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
         {
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
-            //only for tests
-            //actionTaken = true;
         }
 
         Flip();
@@ -69,10 +72,45 @@ public class playerActions : MonoBehaviour
         rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
     }
 
-    private bool IsGrounded()
+    public bool isGrounded()
     {
-        return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
+        if (Physics2D.BoxCast(transform.position, boxSize, 0, -transform.up, castDistance, groundLayer))
+        {
+            grounded = true;
+            return true;
+
+        }
+        else
+        {
+            grounded = false;
+            return false;
+            
+        }
     }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireCube(transform.position - transform.up * castDistance, boxSize);
+    }
+    //private void OnCollisionEnter2D(Collision2D other)
+    //{
+    //    if (other.gameObject.CompareTag("Ground"))
+    //    {
+    //        Vector3 normal = other.GetContact(0).normal;
+    //        if (normal == Vector3.up)
+    //        {
+    //            grounded = true;
+    //        }
+    //    }
+    //}
+
+    //private void OnCollisionExit2D(Collision2D other)
+    //{
+    //    if (other.gameObject.CompareTag("Ground"))
+    //    {
+    //        grounded = false;
+    //    }
+    //}
 
     private void Flip()
     {
