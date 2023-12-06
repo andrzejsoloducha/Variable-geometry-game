@@ -76,15 +76,11 @@ public class playerActions : MonoBehaviour
     {
         if (Physics2D.BoxCast(transform.position, boxSize, 0, -transform.up, castDistance, groundLayer))
         {
-            grounded = true;
             return true;
-
         }
         else
         {
-            grounded = false;
             return false;
-            
         }
     }
 

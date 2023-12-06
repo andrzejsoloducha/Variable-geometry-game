@@ -11,8 +11,10 @@ public class turnTimer : MonoBehaviour
     public int currentPlayer = 0;
     private int maxPlayers;
     public GameObject[] allPlayers;
-    public GameObject playerScript;
-    public playerActions playerSc;
+    public bool actionTakenS;
+    private playerActions scPlayerActions;
+    private GameObject playerScript;
+
 
     [SerializeField] Text timeLeftText;
 
@@ -24,7 +26,7 @@ public class turnTimer : MonoBehaviour
         maxPlayers = allPlayers.Length;
 
         GameObject playerScript = GameObject.Find("playerActions");
-        playerActions playerSc = playerScript.GetComponent<playerActions>();
+        playerActions scPlayerActions = playerScript.GetComponent<playerActions>();
         
     }
 
@@ -33,15 +35,16 @@ public class turnTimer : MonoBehaviour
         currentTime -= 1 * Time.deltaTime;
         timeLeftText.text = currentTime.ToString("0");
 
-        if (playerSc)
+        if (scPlayerActions)
         {
-            bool actionTaken = playerSc.actionTaken;
-        } else
+            bool actionTakenS = scPlayerActions.actionTaken;
+        }
+        else
         {
-            Debug.Log("No game object called playerSc found");
+            Debug.Log("no game object called scPlayerActions found");
         }
 
-        if (currentTime <= 0 | playerSc.actionTaken)
+        if (currentTime <= 0 | actionTakenS)
         {
             EndTurn();
             SwitchPlayer();
@@ -51,7 +54,7 @@ public class turnTimer : MonoBehaviour
     void EndTurn()
     {
         currentTime = turnTime;
-        playerSc.actionTaken = false;
+        actionTakenS = false;
     }
 
     void SwitchPlayer()
