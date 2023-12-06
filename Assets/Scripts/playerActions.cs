@@ -34,20 +34,21 @@ public class playerActions : MonoBehaviour
 
         groundLayer = LayerMask.GetMask("Ground");
 
-        GameObject turnScript = GameObject.Find("turnTimer");
-        turnTimer scTimer = turnScript.GetComponent<turnTimer>();
+        turnTimer turnScript = GameObject.Find("turnTimer").GetComponent<turnTimer>();
     }
 
     void Update()
     {
-        if (scTimer)
+        if (turnScript)
         {
-            int currPlayer = scTimer.currentPlayer;
+            int currPlayer = turnScript.currentPlayer;
         }
         else
         {
             Debug.Log("No game object called scTimer found");
         }
+        
+        Debug.Log(currPlayer);
 
         rb = allPlayers[currPlayer].GetComponent<Rigidbody2D>();
 
@@ -88,25 +89,6 @@ public class playerActions : MonoBehaviour
     {
         Gizmos.DrawWireCube(transform.position - transform.up * castDistance, boxSize);
     }
-    //private void OnCollisionEnter2D(Collision2D other)
-    //{
-    //    if (other.gameObject.CompareTag("Ground"))
-    //    {
-    //        Vector3 normal = other.GetContact(0).normal;
-    //        if (normal == Vector3.up)
-    //        {
-    //            grounded = true;
-    //        }
-    //    }
-    //}
-
-    //private void OnCollisionExit2D(Collision2D other)
-    //{
-    //    if (other.gameObject.CompareTag("Ground"))
-    //    {
-    //        grounded = false;
-    //    }
-    //}
 
     private void Flip()
     {

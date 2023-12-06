@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class turnTimer : MonoBehaviour
 {
-    public float turnTime = 5.0f;
+    private float turnTime = 10.0f;
     private float currentTime = 0f;
 
     public int currentPlayer = 0;
@@ -25,19 +25,18 @@ public class turnTimer : MonoBehaviour
         allPlayers = GameObject.FindGameObjectsWithTag("Player");
         maxPlayers = allPlayers.Length;
 
-        GameObject playerScript = GameObject.Find("playerActions");
-        playerActions scPlayerActions = playerScript.GetComponent<playerActions>();
+        playerActions playerScript = GameObject.Find("playerActions").GetComponent<playerActions>();
         
     }
 
     void Update()
     {
         currentTime -= 1 * Time.deltaTime;
-        timeLeftText.text = currentTime.ToString("0");
+        timeLeftText.text = currentTime.ToString("0.0");
 
-        if (scPlayerActions)
+        if (playerScript)
         {
-            bool actionTakenS = scPlayerActions.actionTaken;
+            bool actionTakenS = playerScript.actionTaken;
         }
         else
         {
