@@ -8,18 +8,17 @@ public class playerActions : MonoBehaviour
 {
     private float horizontal;
     private float speed = 8f;
-    private float jumpingPower = 16f;
+    private float jumpingPower = 10f;
     private bool isFacingRight = true;
 
     public GameManager gameManager;
-
-    //public GameObject[] allPlayers;
 
     public Rigidbody2D[] rigidbodies;
     public Vector2 boxSize = new Vector2(0.8f, 0.2f);
     public float castDistance = 0.5f;
     public LayerMask groundLayer;
     public int currentPlayer;
+    public GameObject[] players;
 
 
     void Start()
@@ -39,6 +38,9 @@ public class playerActions : MonoBehaviour
     void Update()
     {
         int currentPlayer = gameManager.currentPlayer;
+
+        Rigidbody2D rb = rigidbodies[currentPlayer];
+
         horizontal = Input.GetAxisRaw("Horizontal");
 
         if (Input.GetButtonDown("Jump") && isGrounded())
@@ -57,6 +59,7 @@ public class playerActions : MonoBehaviour
 
     private void FixedUpdate()
     {
+        int currentPlayer = gameManager.currentPlayer;
         rigidbodies[currentPlayer].velocity = new Vector2(horizontal * speed, rigidbodies[currentPlayer].velocity.y);
     }
 
