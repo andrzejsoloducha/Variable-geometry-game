@@ -9,14 +9,17 @@ public class GenerateMap : MonoBehaviour
 
     public Tilemap tilemap;
     public TileBase tile;
-    
 
-    public int width = 60;
-    public int height = 40;
+    public GameManager gameManager;
+    private int width;
+    private int height;
 
 
     void Start()
     {
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        width = gameManager.mapWidth;
+        height = gameManager.mapHeight;
         ClearMap();
         int[,] map = new int[width, height];
         float seed = Time.time;

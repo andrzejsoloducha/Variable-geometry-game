@@ -11,57 +11,44 @@ public class playerActions : MonoBehaviour
     private float jumpingPower = 16f;
     private bool isFacingRight = true;
 
-    public int maxPlayers;
-    public GameObject[] allPlayers;
+    public GameManager gameManager;
 
-    public bool actionTaken = false;
+    //public GameObject[] allPlayers;
 
-    public GameObject turnScript;
-    public turnTimer scTimer;
-    private int currPlayer = 0;
-    public Rigidbody2D rb;
-    public bool grounded;
-
+    public Rigidbody2D[] rigidbodies;
     public Vector2 boxSize = new Vector2(0.8f, 0.2f);
     public float castDistance = 0.5f;
     public LayerMask groundLayer;
+    public int currentPlayer;
 
 
     void Start()
     {
-        allPlayers = GameObject.FindGameObjectsWithTag("Player");
-        maxPlayers = allPlayers.Length;
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+
+        rigidbodies = new Rigidbody2D[players.Length];
+        for (int i = 0; i < players.Length; i++)
+        {
+            rigidbodies[i] = players[i].GetComponent<Rigidbody2D>();
+        }
 
         groundLayer = LayerMask.GetMask("Ground");
-
-        turnTimer turnScript = GameObject.Find("turnTimer").GetComponent<turnTimer>();
     }
 
     void Update()
     {
-        if (turnScript)
-        {
-            int currPlayer = turnScript.currentPlayer;
-        }
-        else
-        {
-            Debug.Log("No game object called scTimer found");
-        }
-        
-        Debug.Log(currPlayer);
-
-        rb = allPlayers[currPlayer].GetComponent<Rigidbody2D>();
-
+        int currentPlayer = gameManager.currentPlayer;
         horizontal = Input.GetAxisRaw("Horizontal");
 
         if (Input.GetButtonDown("Jump") && isGrounded())
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
+            rigidbodies[currentPlayer].velocity = new Vector2(rigidbodies[currentPlayer].velocity.x, jumpingPower);
         }
 
-        if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
+        if (Input.GetButtonUp("Jump") && rigidbodies[currentPlayer].velocity.y > 0f)
         {
-            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
+            rigidbodies[currentPlayer].velocity = new Vector2(rigidbodies[currentPlayer].velocity.x, rigidbodies[currentPlayer].velocity.y * 0.5f);
         }
 
         Flip();
@@ -70,25 +57,24 @@ public class playerActions : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
+        rigidbodies[currentPlayer].velocity = new Vector2(horizontal * speed, rigidbodies[currentPlayer].velocity.y);
     }
 
     public bool isGrounded()
     {
-        if (Physics2D.BoxCast(transform.position, boxSize, 0, -transform.up, castDistance, groundLayer))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        int currentPlayer = gameManager.currentPlayer;
+
+        Vector2 position = rigidbodies[currentPlayer].transform.position;
+        Vector2 size = rigidbodies[currentPlayer].GetComponent<BoxCollider2D>().size;
+
+        Vector2 offset = new Vector2(0, -size.y / 2f);
+        float radius = 0.1f;
+
+        bool grounded = Physics2D.OverlapCircle(position + offset, radius, groundLayer);
+
+        return grounded;
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawWireCube(transform.position - transform.up * castDistance, boxSize);
-    }
 
     private void Flip()
     {

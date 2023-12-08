@@ -9,12 +9,13 @@ public class PlayerGenerator : MonoBehaviour
     public Tilemap tilemap;
     public GameObject playerPrefab;
     public Vector3Int cellPosition;
-    public int n = 1;
 
+    public GameManager gameManager;
     private List<Vector3> availablePlaces;
 
     void Start()
     {
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         availablePlaces = new List<Vector3>();
         tilemap = GetComponent<Tilemap>();
 
@@ -37,7 +38,7 @@ public class PlayerGenerator : MonoBehaviour
 
     void Respawn()
     {
-        for (int i = 0; i < n; i++)
+        for (int i = 0; i < gameManager.totalPlayers; i++)
         {
             if (availablePlaces.Count > 0)
             {
@@ -46,6 +47,8 @@ public class PlayerGenerator : MonoBehaviour
                 Vector3 position = availablePlaces[index];
                 GameObject clonePlayer = Instantiate(playerPrefab, position, Quaternion.identity);
                 Rigidbody2D playerRigidbody2D = clonePlayer.AddComponent<Rigidbody2D>();
+                BoxCollider2D playerCollider2D = clonePlayer.AddComponent<BoxCollider2D>();
+                playerRigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
                 clonePlayer.name = "Player" + i;
                 clonePlayer.tag = "Player";
                 availablePlaces.RemoveAt(index);

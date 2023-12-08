@@ -5,45 +5,21 @@ using UnityEngine.UI;
 
 public class turnTimer : MonoBehaviour
 {
-    private float turnTime = 10.0f;
-    private float currentTime = 0f;
-
-    public int currentPlayer = 0;
-    private int maxPlayers;
-    public GameObject[] allPlayers;
-    public bool actionTakenS;
-    private playerActions scPlayerActions;
-    private GameObject playerScript;
-
-
+    public GameManager gameManager;
     [SerializeField] Text timeLeftText;
 
     void Start()
     {
-        currentTime = turnTime;
-
-        allPlayers = GameObject.FindGameObjectsWithTag("Player");
-        maxPlayers = allPlayers.Length;
-
-        playerActions playerScript = GameObject.Find("playerActions").GetComponent<playerActions>();
-        
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        gameManager.currentTime = gameManager.turnTime;
     }
 
     void Update()
     {
-        currentTime -= 1 * Time.deltaTime;
-        timeLeftText.text = currentTime.ToString("0.0");
+        gameManager.currentTime -= 1 * Time.deltaTime;
+        timeLeftText.text = gameManager.currentTime.ToString("0.0");
 
-        if (playerScript)
-        {
-            bool actionTakenS = playerScript.actionTaken;
-        }
-        else
-        {
-            Debug.Log("no game object called scPlayerActions found");
-        }
-
-        if (currentTime <= 0 | actionTakenS)
+        if (gameManager.currentTime <= 0 | gameManager.actionTaken)
         {
             EndTurn();
             SwitchPlayer();
@@ -52,17 +28,17 @@ public class turnTimer : MonoBehaviour
 
     void EndTurn()
     {
-        currentTime = turnTime;
-        actionTakenS = false;
+        gameManager.currentTime = gameManager.turnTime;
+        gameManager.actionTaken = false;
     }
 
     void SwitchPlayer()
     {
-        currentPlayer += 1;
+        gameManager.currentPlayer += 1;
 
-        if (currentPlayer >= maxPlayers)
+        if (gameManager.currentPlayer >= gameManager.totalPlayers)
         {
-            currentPlayer = 0;
+            gameManager.currentPlayer = 0;
         }
     }
 }
