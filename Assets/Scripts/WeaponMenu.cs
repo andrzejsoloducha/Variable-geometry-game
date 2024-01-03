@@ -16,9 +16,9 @@ public class WeaponMenu : MonoBehaviour
     public GameObject bazookaPrefab;
     public GameObject buildingPrefab;
 
-    public GameObject player;
+    private GameObject player;
     public GameManager gameManager;
-    public Rigidbody2D[] rigidbodies;
+    private Rigidbody2D[] rigidbodies;
     private int currentWeapon;
 
     void Start()

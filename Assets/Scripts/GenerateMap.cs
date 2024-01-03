@@ -26,6 +26,7 @@ public class GenerateMap : MonoBehaviour
 
         map = GenerateArray(width, height, true);
         map = PerlinNoiseCave(map, Random.Range(0.0001f, 0.4f), true);
+        gameManager.map = map;
 
         RenderMap(map, tilemap, tile);
     }
@@ -59,8 +60,7 @@ public class GenerateMap : MonoBehaviour
 
 
     public static void RenderMap(int[,] map, Tilemap tilemap, TileBase tile)
-    {
-        tilemap.ClearAllTiles();
+     {
         for (int x = 0; x < map.GetUpperBound(0); x++)
         {
             for (int y = 0; y < map.GetUpperBound(1); y++)
