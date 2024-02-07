@@ -229,7 +229,7 @@ GameObject:
   - component: {fileID: 606479969}
   - component: {fileID: 606479968}
   - component: {fileID: 606479972}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: Tilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -939,7 +939,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1563897441}
   - component: {fileID: 1563897440}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Grid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1209,9 +1209,7 @@ MonoBehaviour:
   pistolPrefab: {fileID: 0}
   bazookaPrefab: {fileID: 0}
   buildingPrefab: {fileID: 0}
-  player: {fileID: 0}
   gameManager: {fileID: 2004031350}
-  rigidbodies: []
 --- !u!1 &2004031349
 GameObject:
   m_ObjectHideFlags: 0

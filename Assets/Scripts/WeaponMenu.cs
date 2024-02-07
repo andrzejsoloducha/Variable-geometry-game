@@ -66,11 +66,11 @@ public class WeaponMenu : MonoBehaviour
 
     void SwitchWeapon(GameObject weaponPrefab)
     {
-        //Destroy(weapon.gameObject);
+/*        //Destroy(weapon.gameObject);
         GameObject newWeapon = Instantiate(weaponPrefab, player.transform);
 
         //weapon = newWeapon.GetComponent<Weapon>();
-        UpdateButtons();
+        UpdateButtons();*/
     }
 
     void UpdateButtons()
