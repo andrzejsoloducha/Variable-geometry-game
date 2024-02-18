@@ -109,7 +109,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: e032dc54474f072459dc173aaff18221, type: 3}
-  m_Color: {r: 0.6627451, g: 0.41176474, b: 0.5411765, a: 1}
+  m_Color: {r: 0.13616946, g: 0.24705882, b: 0.6415094, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -141,6 +141,7 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
+<<<<<<< Updated upstream
 --- !u!50 &5012365423507723015
 Rigidbody2D:
   serializedVersion: 4
@@ -213,3 +214,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+=======
+  currentPlayer: 0
+  players: []
+>>>>>>> Stashed changes
