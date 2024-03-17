@@ -1,0 +1,109 @@
+[33mcommit af46973cd07150f55a1728ad65ad6ca373244d9e[m[33m ([m[1;36mHEAD -> [m[1;32mplayer[m[33m)[m
+Author: andrzejsoloducha <139710256+andrzejsoloducha@users.noreply.github.com>
+Date:   Sun Feb 18 16:18:33 2024 +0100
+
+    added colors for different teams
+
+[33mcommit e0b0aeb032aabb5e06364ba14798eff3e0c3a298[m[33m ([m[1;31morigin/player[m[33m)[m
+Author: andrzejsoloducha <139710256+andrzejsoloducha@users.noreply.github.com>
+Date:   Fri Nov 24 22:22:03 2023 +0100
+
+    fixed movement and jumps
+
+[33mcommit da205114463a422387c7630450b4ca3427b97da5[m
+Author: andrzejsoloducha <139710256+andrzejsoloducha@users.noreply.github.com>
+Date:   Sat Nov 11 22:10:13 2023 +0100
+
+    changed player size
+
+[33mcommit 898560048872dec7afdc07be56a56f08d00ba44f[m
+Author: andrzejsoloducha <139710256+andrzejsoloducha@users.noreply.github.com>
+Date:   Sat Nov 11 20:17:18 2023 +0100
+
+    added countdown timer and adapted turn logic to move only one player at a time
+
+[33mcommit a909f4834a68c65b6129e30d5e50e6f9885b5b75[m
+Author: andrzejsoloducha <139710256+andrzejsoloducha@users.noreply.github.com>
+Date:   Tue Oct 10 19:34:01 2023 +0200
+
+    tagged player object
+
+[33mcommit 5f8244b45cb0545613702c167b6c9ca1fe862041[m
+Author: andrzejsoloducha <139710256+andrzejsoloducha@users.noreply.github.com>
+Date:   Mon Oct 9 00:30:16 2023 +0200
+
+    adding turns logic
+
+[33mcommit 57f07074d326e193b210d002f9d28095520dd1ab[m
+Author: andrzejsoloducha <139710256+andrzejsoloducha@users.noreply.github.com>
+Date:   Sun Oct 1 20:07:18 2023 +0200
+
+    updated colliders
+
+[33mcommit e0e8b1fb8009e78f12f5bb6aa5ebce429359d64c[m
+Author: andrzejsoloducha <139710256+andrzejsoloducha@users.noreply.github.com>
+Date:   Tue Sep 26 14:26:28 2023 +0200
+
+    player updates
+
+[33mcommit 5210cb7bf1a9ff08d892a2a67eb57b4358a26673[m
+Author: andrzejsoloducha <139710256+andrzejsoloducha@users.noreply.github.com>
+Date:   Thu Sep 21 23:43:06 2023 +0200
+
+    added player movement
+
+[33mcommit 13bdc92fe5f11142df3639ac895622047894e7b5[m
+Author: andrzejsoloducha <139710256+andrzejsoloducha@users.noreply.github.com>
+Date:   Wed Sep 20 23:56:53 2023 +0200
+
+    player respawn, movement, collision updated
+    
+    collision not working yet,
+
+[33mcommit 542e68c4ca61d906b992715f37b1767adeaee81f[m
+Author: andrzejsoloducha <139710256+andrzejsoloducha@users.noreply.github.com>
+Date:   Wed Sep 20 02:40:07 2023 +0200
+
+    added assets
+
+[33mcommit 1ec4b460fb8feeeb326e73bb1373978469e38028[m
+Author: andrzejsoloducha <139710256+andrzejsoloducha@users.noreply.github.com>
+Date:   Wed Sep 20 02:38:35 2023 +0200
+
+    updated branch to fresh map generator files
+
+[33mcommit b4d061dbf16b5d7e48b72253968b26143d2ce7d8[m
+Merge: dc843c3 4b33fc3
+Author: andrzejsoloducha <139710256+andrzejsoloducha@users.noreply.github.com>
+Date:   Wed Sep 20 02:29:23 2023 +0200
+
+    Merge branch 'map_generator' into player
+
+[33mcommit 4b33fc335d7dcbaa6900d0e04e8d1f7661afcc23[m[33m ([m[1;31morigin/map_generator[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmap_generator[m[33m)[m
+Author: andrzejsoloducha <139710256+andrzejsoloducha@users.noreply.github.com>
+Date:   Wed Sep 20 02:09:55 2023 +0200
+
+    map generator updates
+    
+    map generates every launch of game using perlin noise
+    deleted some files that wasn't needed
+
+[33mcommit dc843c3737205702e7a3124f2f276a7f16ada8a9[m
+Author: andrzejsoloducha <139710256+andrzejsoloducha@users.noreply.github.com>
+Date:   Tue Sep 19 21:02:19 2023 +0200
+
+    player respawn at random locations
+    
+    to be fixed
+
+[33mcommit 1f1bc67983abf0e7cb1379a5378edb1bf48b75c1[m
+Author: andrzejsoloducha <139710256+andrzejsoloducha@users.noreply.github.com>
+Date:   Fri Sep 15 00:42:10 2023 +0200
+
+    added map generator
+
+[33mcommit 66407ff619d0ba166b7fba0bce1ef90f21595e22[m
+Author: andrzejsoloducha <139710256+andrzejsoloducha@users.noreply.github.com>
+Date:   Thu Sep 14 19:18:08 2023 +0200
+
+    Initial commit

@@ -52,7 +52,20 @@ public class PlayerGenerator : MonoBehaviour
                 clonePlayer.name = "Player" + i;
                 clonePlayer.tag = "Player";
                 availablePlaces.RemoveAt(index);
+
+                SpriteRenderer playerSpriteRenderer = clonePlayer.GetComponent<SpriteRenderer>();
+                if (playerSpriteRenderer == null)
+                {
+                    playerSpriteRenderer = clonePlayer.AddComponent<SpriteRenderer>();
+                }
+
+                if (i % 2 != 0)
+                {
+                    playerSpriteRenderer.color = Color.red;
+                }
             }
+
+
             else
             {
                 break;

@@ -107,7 +107,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: e032dc54474f072459dc173aaff18221, type: 3}
-  m_Color: {r: 0.6627451, g: 0.41176474, b: 0.5411765, a: 1}
+  m_Color: {r: 0.079832695, g: 0.08235294, b: 0.6666667, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -135,5 +135,6 @@ MonoBehaviour:
   castDistance: 0
   groundLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 0
   currentPlayer: 0
+  players: []
