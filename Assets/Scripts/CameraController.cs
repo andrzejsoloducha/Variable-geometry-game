@@ -25,12 +25,12 @@ public class CameraController : MonoBehaviour
 
     void AdjustCameraSize()
     {
-
+        float offset = 0.5f;
         float targetOrthoSize;
         float w = gameManager.mapWidth;
         float h = gameManager.mapHeight;
-        float x = w * 0.5f - 0.5f;
-        float y = h * 0.5f - 0.5f;
+        float x = w * 0.5f - offset;
+        float y = h * 0.5f - offset;
         
         mainCamera.transform.position = new Vector3(x, y, -10f);
 
