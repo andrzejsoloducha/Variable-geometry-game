@@ -297,6 +297,8 @@ MonoBehaviour:
   playerPrefab: {fileID: 8785844599905495616, guid: b7bdd095616daf34093e9a9988a07ce8, type: 3}
   cellPosition: {x: 0, y: 0, z: 0}
   gameManager: {fileID: 0}
+  playerLayerName: Player
+  bazookaPrefab: {fileID: 1845223257722909964, guid: f802cc4ac5ee11340944f1cb6292fe98, type: 3}
 --- !u!483693784 &606479970
 TilemapRenderer:
   m_ObjectHideFlags: 0
@@ -760,13 +762,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5be1b2c0f0dbbbf48af0e7b4f93268d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turnTime: 20
+  turnTime: 60
   currentTime: 0
-  totalPlayers: 30
+  totalPlayers: 1
   currentPlayer: 0
   actionTaken: 0
-  mapWidth: 60
-  mapHeight: 40
+  mapWidth: 40
+  mapHeight: 30
 --- !u!4 &2004031351
 Transform:
   m_ObjectHideFlags: 0

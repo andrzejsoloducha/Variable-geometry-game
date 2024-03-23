@@ -15,6 +15,8 @@ public class PlayerGenerator : MonoBehaviour
 
     public string playerLayerName = "Player";
 
+    public GameObject bazookaPrefab;
+
     void Start()
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
@@ -48,25 +50,37 @@ public class PlayerGenerator : MonoBehaviour
                 int index = Random.Range(0, availablePlaces.Count);
 
                 Vector3 position = availablePlaces[index];
-                GameObject clonePlayer = Instantiate(playerPrefab, position, Quaternion.identity);
-                Rigidbody2D playerRigidbody2D = clonePlayer.AddComponent<Rigidbody2D>();
-                BoxCollider2D playerCollider2D = clonePlayer.AddComponent<BoxCollider2D>();
+                GameObject player = Instantiate(playerPrefab, position, Quaternion.identity);
+                Rigidbody2D playerRigidbody2D = player.AddComponent<Rigidbody2D>();
+                BoxCollider2D playerCollider2D = player.AddComponent<BoxCollider2D>();
                 playerRigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
-                clonePlayer.name = "Player" + i;
-                clonePlayer.tag = "Player";
-                availablePlaces.RemoveAt(index);
-                clonePlayer.layer = playerLayer;
+                
+                player.tag = "Player";
+                player.layer = playerLayer;
 
-                SpriteRenderer playerSpriteRenderer = clonePlayer.GetComponent<SpriteRenderer>();
+                GameObject bazooka = Instantiate(bazookaPrefab, player.transform.position, Quaternion.identity);
+                bazooka.transform.SetParent(player.transform);
+                Vector3 bazookaOffset = new Vector3(0.3f, -0.15f, 0f);
+                bazooka.transform.localPosition = bazookaOffset;
+
+                SpriteRenderer playerSpriteRenderer = player.GetComponent<SpriteRenderer>();
                 if (playerSpriteRenderer == null)
                 {
-                    playerSpriteRenderer = clonePlayer.AddComponent<SpriteRenderer>();
+                    playerSpriteRenderer = player.AddComponent<SpriteRenderer>();
                 }
+
 
                 if (i % 2 != 0)
                 {
                     playerSpriteRenderer.color = Color.red;
+                    player.name = "Player" + i + "Red";
                 }
+                else
+                {
+                    player.name = "Player" + i + "Blue";
+                }
+
+                availablePlaces.RemoveAt(index);
             }
 
 

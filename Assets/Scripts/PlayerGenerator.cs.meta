@@ -6,6 +6,8 @@ MonoImporter:
   defaultReferences:
   - tilemap: {instanceID: 0}
   - playerPrefab: {fileID: 8785844599905495616, guid: b7bdd095616daf34093e9a9988a07ce8, type: 3}
+  - gameManager: {instanceID: 0}
+  - bazookaPrefab: {fileID: 1845223257722909964, guid: f802cc4ac5ee11340944f1cb6292fe98, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
