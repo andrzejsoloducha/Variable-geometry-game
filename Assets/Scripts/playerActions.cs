@@ -9,7 +9,7 @@ public class playerActions : MonoBehaviour
     private float horizontal;
     private float speed = 8f;
     private float jumpingPower = 10f;
-    private bool isFacingRight = true;
+    private bool[] isFacingRight;
 
     public GameManager gameManager;
 
@@ -20,6 +20,7 @@ public class playerActions : MonoBehaviour
     public int currentPlayer;
     public GameObject[] players;
     public string playerLayerName = "Player";
+    //private Vector3[] localScales;
 
     void Start()
     {
@@ -27,11 +28,13 @@ public class playerActions : MonoBehaviour
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
 
         rigidbodies = new Rigidbody2D[players.Length];
+        isFacingRight = new bool[players.Length];
+
         for (int i = 0; i < players.Length; i++)
         {
             rigidbodies[i] = players[i].GetComponent<Rigidbody2D>();
+            isFacingRight[i] = true;
         }
-
         groundLayer = LayerMask.GetMask("Ground");
     }
 
@@ -53,7 +56,7 @@ public class playerActions : MonoBehaviour
             rigidbodies[currentPlayer].velocity = new Vector2(rigidbodies[currentPlayer].velocity.x, rigidbodies[currentPlayer].velocity.y * 0.5f);
         }
 
-        Flip();
+        Flip(currentPlayer, players);
 
     }
 
@@ -90,14 +93,14 @@ public class playerActions : MonoBehaviour
     }
 
 
-    private void Flip()
+    private void Flip(int currentPlayer, GameObject[] players)
     {
-        if (isFacingRight && horizontal < 0f || !isFacingRight && horizontal > 0f)
+        if ((isFacingRight[currentPlayer] && horizontal < 0f) || (!isFacingRight[currentPlayer] && horizontal > 0f))
         {
-            isFacingRight = !isFacingRight;
-            Vector3 localScale = transform.localScale;
+            isFacingRight[currentPlayer] = !isFacingRight[currentPlayer];
+            Vector3 localScale = ;
             localScale.x *= -1f;
-            transform.localScale = localScale;
+            players[currentPlayer].transform.localScale = localScale;
         }
     }
 }
