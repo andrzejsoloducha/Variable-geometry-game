@@ -78,7 +78,7 @@ public class playerActions : MonoBehaviour
 
         if (!grounded)
         {
-            RaycastHit2D hit = Physics2D.Raycast(position + offset, Vector2.down, 0.1f, playerLayer);
+            RaycastHit2D hit = Physics2D.Raycast(position + offset, Vector2.down, size.y / 2f + 0.1f, playerLayer); // need to be fixed later
             if (hit.collider != null)
             {
                 Debug.Log("Hit object: " + hit.collider.gameObject.name);
