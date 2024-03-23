@@ -19,7 +19,7 @@ public class playerActions : MonoBehaviour
     public LayerMask groundLayer;
     public int currentPlayer;
     public GameObject[] players;
-
+    public string playerLayerName = "Player";
 
     void Start()
     {
@@ -66,6 +66,7 @@ public class playerActions : MonoBehaviour
     public bool isGrounded()
     {
         int currentPlayer = gameManager.currentPlayer;
+        int playerLayer = LayerMask.NameToLayer(playerLayerName);
 
         Vector2 position = rigidbodies[currentPlayer].transform.position;
         Vector2 size = rigidbodies[currentPlayer].GetComponent<BoxCollider2D>().size;
@@ -74,6 +75,16 @@ public class playerActions : MonoBehaviour
         float radius = 0.1f;
 
         bool grounded = Physics2D.OverlapCircle(position + offset, radius, groundLayer);
+
+        if (!grounded)
+        {
+            RaycastHit2D hit = Physics2D.Raycast(position + offset, Vector2.down, 0.1f, playerLayer);
+            if (hit.collider != null)
+            {
+                Debug.Log("Hit object: " + hit.collider.gameObject.name);
+                grounded = true;
+            }
+        }
 
         return grounded;
     }

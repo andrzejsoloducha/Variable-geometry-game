@@ -13,6 +13,8 @@ public class PlayerGenerator : MonoBehaviour
     public GameManager gameManager;
     private List<Vector3> availablePlaces;
 
+    public string playerLayerName = "Player";
+
     void Start()
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
@@ -38,6 +40,7 @@ public class PlayerGenerator : MonoBehaviour
 
     void Respawn()
     {
+        int playerLayer = LayerMask.NameToLayer(playerLayerName);
         for (int i = 0; i < gameManager.totalPlayers; i++)
         {
             if (availablePlaces.Count > 0)
@@ -52,6 +55,7 @@ public class PlayerGenerator : MonoBehaviour
                 clonePlayer.name = "Player" + i;
                 clonePlayer.tag = "Player";
                 availablePlaces.RemoveAt(index);
+                clonePlayer.layer = playerLayer;
 
                 SpriteRenderer playerSpriteRenderer = clonePlayer.GetComponent<SpriteRenderer>();
                 if (playerSpriteRenderer == null)
