@@ -19,8 +19,9 @@ public class playerActions : MonoBehaviour
     public Vector2 boxSize = new Vector2(0.8f, 0.2f);
     public LayerMask groundLayer;
     public int currentPlayer;
-    public GameObject[] players;
+    public GameObject[] playersArray;
     public GameObject player;
+    private List<GameObject> players = new List<GameObject> ();
     public string playerLayerName = "Player";
     public Vector3 scale;
     //private Vector3[] localScales;
@@ -28,10 +29,16 @@ public class playerActions : MonoBehaviour
     void Start()
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        GameObject[] playersArray = GameObject.FindGameObjectsWithTag("Player");
         //Debug.Log("Number of players: " + players.Length);
-        rigidbodies = new Rigidbody2D[players.Length];
-        isFacingRight = new bool[players.Length];
+
+        foreach (GameObject player in playersArray)
+        {
+            players.Add(player);
+        }
+
+        rigidbodies = new Rigidbody2D[playersArray.Length];
+        isFacingRight = new bool[playersArray.Length];
 
         // debugging players[]
         //for (int i = 0; i < players.Length; i++)
@@ -45,19 +52,30 @@ public class playerActions : MonoBehaviour
         //        Debug.LogWarning("znalazlem nulla jebanego");
         //    }
         //}
-        for (int i = 0; i < players.Length; i++)
+        for (int i = 0; i < playersArray.Length; i++)
         {
-            rigidbodies[i] = players[i].GetComponent<Rigidbody2D>();
+            rigidbodies[i] = playersArray[i].GetComponent<Rigidbody2D>();
             isFacingRight[i] = true;
         }
         groundLayer = LayerMask.GetMask("Ground");
     }
 
+    public GameObject GetPlayer(int index)
+    {
+        if (index >= 0 && index < players.Count)
+        {
+            return players[index];
+        }
+        else
+        {
+            Debug.LogError("invalid player index, returning null");
+            return null;
+        }
+    }
+
     void Update()
     {
         int currentPlayer = gameManager.currentPlayer;
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-        GameObject player = players[currentPlayer]; // DLACZEGO TO KURWA NULLUJE
 
         Rigidbody2D rb = rigidbodies[currentPlayer];
         Debug.Log("Current player index: " + currentPlayer);
@@ -73,26 +91,7 @@ public class playerActions : MonoBehaviour
             rigidbodies[currentPlayer].velocity = new Vector2(rigidbodies[currentPlayer].velocity.x, rigidbodies[currentPlayer].velocity.y * 0.5f);
         }
 
-        if (player != null)
-        {
-            Flip(currentPlayer, player);
-        }
-        else
-        {
-            Debug.LogError("player jest nullem");
-        }
-        //if (players.Length > 0 && playersList[currentPlayer] != null)
-        //{
-        //    GameObject player = playersList[currentPlayer];
-        //    Debug.Log("Player name: " + player.name);
-        //    Flip(currentPlayer, player);
-        //}
-        //else
-        //{
-        //    Debug.LogError("players[] jest jebanym nullem???");
-        //}
-
-
+        Flip(currentPlayer);
     }
 
     private void FixedUpdate()
@@ -128,18 +127,29 @@ public class playerActions : MonoBehaviour
     }
 
 
-    private void Flip(int currentPlayer, GameObject player)
+    private void Flip(int currentPlayer)
     {
         if ((isFacingRight[currentPlayer] && horizontal < 0f) || (!isFacingRight[currentPlayer] && horizontal > 0f))
         {
-            //Vector3 currentRotation = player.transform.localEulerAngles;
-            //currentRotation.y += 180f;
-            //player.transform.localEulerAngles = currentRotation;
+            //isFacingRight[currentPlayer] = !isFacingRight[currentPlayer];
+            //Vector3 scale = currPlayer.transform.localScale;
+            //scale.x *= -1f;
+            //currPlayer.transform.localScale = scale;
 
-            isFacingRight[currentPlayer] = !isFacingRight[currentPlayer];
-            Vector3 scale = player.transform.localScale;
-            scale.x *= -1f;
-            player.transform.localScale = scale;
+            //Vector3 currentRotation = currPlayer.transform.localEulerAngles;
+            //currentRotation.y += 180f;
+            //currPlayer.transform.localEulerAngles = currentRotation;
+
+            GameObject currPlayer = GetPlayer(currentPlayer);
+            SpriteRenderer spriteRenderer = currPlayer.GetComponent<SpriteRenderer>();
+            if (spriteRenderer != null)
+            {
+                spriteRenderer.flipX = !spriteRenderer.flipX;
+            }
+            else
+            {
+                Debug.LogWarning("sprite renderer component not found on the player");
+            }
         }
     }
 }
