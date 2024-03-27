@@ -764,7 +764,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   turnTime: 60
   currentTime: 0
-  totalPlayers: 1
+  totalPlayers: 6
   currentPlayer: 0
   actionTaken: 0
   mapWidth: 40
