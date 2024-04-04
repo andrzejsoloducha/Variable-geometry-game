@@ -50,34 +50,43 @@ public class PlayerGenerator : MonoBehaviour
                 int index = Random.Range(0, availablePlaces.Count);
 
                 Vector3 position = availablePlaces[index];
-                GameObject player = Instantiate(playerPrefab, position, Quaternion.identity);
-                Rigidbody2D playerRigidbody2D = player.AddComponent<Rigidbody2D>();
-                BoxCollider2D playerCollider2D = player.AddComponent<BoxCollider2D>();
+                GameObject playerObject = Instantiate(playerPrefab, position, Quaternion.identity);
+                Player playerComponent = playerObject.GetComponent<Player>();
+                Rigidbody2D playerRigidbody2D = playerObject.AddComponent<Rigidbody2D>();
+                BoxCollider2D playerCollider2D = playerObject.AddComponent<BoxCollider2D>();
                 playerRigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
                 
-                player.tag = "Player";
-                player.layer = playerLayer;
+                playerObject.tag = "Player";
+                playerObject.layer = playerLayer;
 
-                GameObject bazooka = Instantiate(bazookaPrefab, player.transform.position, Quaternion.identity);
-                bazooka.transform.SetParent(player.transform);
-                Vector3 bazookaOffset = new Vector3(0.3f, -0.15f, 0f);
-                bazooka.transform.localPosition = bazookaOffset;
+                if (i == 1)
+                {
+                    GameObject bazooka = Instantiate(bazookaPrefab, playerObject.transform.position, Quaternion.identity);
+                    bazooka.transform.SetParent(playerObject.transform);
+                    Vector3 bazookaOffset = new Vector3(0.3f, -0.15f, 0f);
+                    bazooka.transform.localPosition = bazookaOffset;
+                }
 
-                SpriteRenderer playerSpriteRenderer = player.GetComponent<SpriteRenderer>();
+
+                SpriteRenderer playerSpriteRenderer = playerObject.GetComponent<SpriteRenderer>();
                 if (playerSpriteRenderer == null)
                 {
-                    playerSpriteRenderer = player.AddComponent<SpriteRenderer>();
+                    playerSpriteRenderer = playerObject.AddComponent<SpriteRenderer>();
                 }
 
-
-                if (i % 2 != 0)
+                if (gameManager.deathmatch == false)
                 {
-                    playerSpriteRenderer.color = Color.red;
-                    player.name = "Player" + i + "Red";
-                }
-                else
-                {
-                    player.name = "Player" + i + "Blue";
+                    if (i % 2 != 0)
+                    {
+                        playerSpriteRenderer.color = Color.red;
+                        playerObject.name = "Player" + i + "Red";
+                        playerComponent.team = "red";
+                    }
+                    else
+                    {
+                        playerObject.name = "Player" + i + "Blue";
+                        playerComponent.team = "blue";
+                    }
                 }
 
                 availablePlaces.RemoveAt(index);

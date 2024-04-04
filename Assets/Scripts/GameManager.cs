@@ -15,4 +15,6 @@ public class GameManager : MonoBehaviour
     public int mapWidth = 60;
     public int mapHeight = 40;
     public int[,] map;
+
+    public bool deathmatch = false;
 }

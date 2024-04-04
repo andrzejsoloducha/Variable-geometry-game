@@ -769,6 +769,7 @@ MonoBehaviour:
   actionTaken: 0
   mapWidth: 40
   mapHeight: 30
+  deathmatch: 0
 --- !u!4 &2004031351
 Transform:
   m_ObjectHideFlags: 0

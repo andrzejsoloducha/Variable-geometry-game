@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class playerActions : MonoBehaviour
+public class Player : MonoBehaviour
 {
     private float horizontal;
     private float speed = 8f;
@@ -14,6 +14,7 @@ public class playerActions : MonoBehaviour
     private bool[] isFacingRight;
 
     public GameManager gameManager;
+    public GameObject bulletPrefab;
 
     public Rigidbody2D[] rigidbodies;
     public Vector2 boxSize = new Vector2(0.8f, 0.2f);
@@ -21,10 +22,15 @@ public class playerActions : MonoBehaviour
     public int currentPlayer;
     public GameObject[] playersArray;
     public GameObject player;
+    public GameObject bazooka;
     private List<GameObject> players = new List<GameObject> ();
     public string playerLayerName = "Player";
     public Vector3 scale;
-    //private Vector3[] localScales;
+    private string _team;
+
+
+    public Transform bulletSpawnPoint;
+    public float shootingForce = 10f;
 
     void Start()
     {
@@ -91,9 +97,37 @@ public class playerActions : MonoBehaviour
             rigidbodies[currentPlayer].velocity = new Vector2(rigidbodies[currentPlayer].velocity.x, rigidbodies[currentPlayer].velocity.y * 0.5f);
         }
 
+        if (Input.GetButtonDown("X"))
+        {
+            ShootBazooka();
+        }
         Flip(currentPlayer);
     }
 
+    public string team
+    {
+        get { return _team; }
+        set { _team = value.ToLower(); }
+    }
+
+    private void ShootBazooka()
+    {
+        bazooka = GameObject.Find("bazooka");
+        Vector2 direction = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized;
+        Transform bulletSpawnPoint = bazooka.transform.Find("shooting_point");
+        GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
+        Rigidbody2D rigbody = bullet.AddComponent<RigidBody2D>();
+        rigbody.constraints = RigidbodyConstraints2D.FreezeRotation;
+
+        if (rigbody != null)
+        {
+            rigbody.AddForce(direction * shootingForce, ForceMode2D.Impulse);
+        }
+        else
+        {
+            Debug.LogWarning("Bazooka prefab does not have a rigidbody2D component");
+        }
+    }
     private void FixedUpdate()
     {
         int currentPlayer = gameManager.currentPlayer;
