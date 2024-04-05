@@ -115,18 +115,8 @@ public class Player : MonoBehaviour
         bazooka = GameObject.Find("bazooka");
         Vector2 direction = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized;
         Transform bulletSpawnPoint = bazooka.transform.Find("shooting_point");
-        GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
-        Rigidbody2D rigbody = bullet.AddComponent<RigidBody2D>();
-        rigbody.constraints = RigidbodyConstraints2D.FreezeRotation;
-
-        if (rigbody != null)
-        {
-            rigbody.AddForce(direction * shootingForce, ForceMode2D.Impulse);
-        }
-        else
-        {
-            Debug.LogWarning("Bazooka prefab does not have a rigidbody2D component");
-        }
+        GameObject go = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
+        Bullet bullet = go.GetComponent<Bullet>();
     }
     private void FixedUpdate()
     {

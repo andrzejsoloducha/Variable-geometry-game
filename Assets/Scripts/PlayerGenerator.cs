@@ -59,7 +59,7 @@ public class PlayerGenerator : MonoBehaviour
                 playerObject.tag = "Player";
                 playerObject.layer = playerLayer;
 
-                if (i == 1)
+                if (i == 0)
                 {
                     GameObject bazooka = Instantiate(bazookaPrefab, playerObject.transform.position, Quaternion.identity);
                     bazooka.transform.SetParent(playerObject.transform);
