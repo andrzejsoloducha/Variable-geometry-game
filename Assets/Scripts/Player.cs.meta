@@ -3,7 +3,11 @@ guid: ad8a87139e1a6df4bbffad7a8e646c9e
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - gameManager: {instanceID: 0}
+  - bulletPrefab: {fileID: 7963568831271470675, guid: 0e083aeabb1b9d44081d29d99854ae2b, type: 3}
+  - player: {instanceID: 0}
+  - bazookaPrefab: {fileID: 1845223257722909964, guid: f802cc4ac5ee11340944f1cb6292fe98, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

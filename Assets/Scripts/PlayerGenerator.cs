@@ -15,8 +15,6 @@ public class PlayerGenerator : MonoBehaviour
 
     public string playerLayerName = "Player";
 
-    public GameObject bazookaPrefab;
-
     void Start()
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
@@ -58,15 +56,6 @@ public class PlayerGenerator : MonoBehaviour
                 
                 playerObject.tag = "Player";
                 playerObject.layer = playerLayer;
-
-                if (i == 0)
-                {
-                    GameObject bazooka = Instantiate(bazookaPrefab, playerObject.transform.position, Quaternion.identity);
-                    bazooka.transform.SetParent(playerObject.transform);
-                    Vector3 bazookaOffset = new Vector3(0.3f, -0.15f, 0f);
-                    bazooka.transform.localPosition = bazookaOffset;
-                }
-
 
                 SpriteRenderer playerSpriteRenderer = playerObject.GetComponent<SpriteRenderer>();
                 if (playerSpriteRenderer == null)
