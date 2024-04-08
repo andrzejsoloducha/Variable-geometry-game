@@ -23,22 +23,18 @@ public class Player : MonoBehaviour
     public GameObject[] playersArray;
     //public GameObject player;
     public GameObject bazookaPrefab;
-    public GameObject bazooka;
+    private GameObject bazooka;
     private List<GameObject> players = new List<GameObject> ();
     public string playerLayerName = "Player";
     public Vector3 scale;
     private string _team;
-
-
-    private Transform bulletSpawnPoint;
-    public float shootingForce = 10f;
+    private bool[] bazookaAssignments;
 
     void Start()
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         GameObject[] playersArray = GameObject.FindGameObjectsWithTag("Player");
-        //Debug.Log("Number of players: " + players.Length);
-
+        bazookaAssignments = new bool[playersArray.Length];
         foreach (GameObject player in playersArray)
         {
             players.Add(player);
@@ -83,11 +79,10 @@ public class Player : MonoBehaviour
     void Update()
     {
         int currentPlayer = gameManager.currentPlayer;
-
+        GameObject currPlayer = GetPlayer(currentPlayer);
         Rigidbody2D rb = rigidbodies[currentPlayer];
-        //Debug.Log("Current player index: " + currentPlayer);
-        horizontal = Input.GetAxisRaw("Horizontal");
 
+        horizontal = Input.GetAxisRaw("Horizontal");
         if (Input.GetButtonDown("Jump") && isGrounded())
         {
             rigidbodies[currentPlayer].velocity = new Vector2(rigidbodies[currentPlayer].velocity.x, jumpingPower);
@@ -98,30 +93,22 @@ public class Player : MonoBehaviour
             rigidbodies[currentPlayer].velocity = new Vector2(rigidbodies[currentPlayer].velocity.x, rigidbodies[currentPlayer].velocity.y * 0.5f);
         }
 
-        GameObject currPlayer = GetPlayer(currentPlayer);
-        if (bazookaPrefab != null)
+        if (currPlayer == gameObject)
         {
-            GameObject bazooka = Instantiate(bazookaPrefab, currPlayer.transform.position, Quaternion.identity);
+            AssignBazooka(currentPlayer, currPlayer);
         }
         else
         {
-            Debug.LogWarning("bazooka prefab couldn't be found");
+            UnassignBazooka(currentPlayer);
         }
-        if (bazooka != null)
-        {
-            bazooka.transform.SetParent(currPlayer.transform);
-            Vector3 bazookaOffset = new Vector3(0.3f, -0.15f, 0f);
-            bazooka.transform.localPosition = bazookaOffset;
-        }
-        else
-        {
-            Debug.LogWarning("bazooka is null");
-        }
+
+        StickBazookaToPlayer();
 
         if (Input.GetButtonDown("Fire1"))
         {
-            ShootBazooka(bazooka);
+            ShootBazooka(currPlayer);
         }
+
         Flip(currentPlayer);
     }
 
@@ -130,26 +117,77 @@ public class Player : MonoBehaviour
         get { return _team; }
         set { _team = value.ToLower(); }
     }
-
-    private void ShootBazooka(GameObject bazooka)
+    private void StickBazookaToPlayer()
     {
-        Vector2 direction = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized;
-        if (bazooka != null)
+        if (bazooka != null && bazooka.transform.parent == transform)
         {
-            for (int i = 0; i < bazooka.transform.childCount; i++)
+            bazooka.transform.position = transform.position;
+            bazooka.transform.rotation = transform.rotation;
+        }
+    }
+    private void AssignBazooka(int currentPlayer, GameObject currPlayer)
+    {
+        if (bazookaPrefab != null)
+        {
+            if (!bazookaAssignments[currentPlayer])
             {
-                Transform childTransform = bazooka.transform.GetChild(i);
-                GameObject childBazooka = childTransform.gameObject;
-                Debug.Log("Child GameObject name: " + childBazooka.name + "and its transform: " + childTransform.name + "and coords" + childTransform.position);
+                GameObject bazooka = Instantiate(bazookaPrefab, currPlayer.transform.position, Quaternion.identity);
+                bazooka.transform.SetParent(currPlayer.transform);
+                Vector3 bazookaOffset = new Vector3(0.3f, -0.15f, 0f);
+                bazooka.transform.localPosition = bazookaOffset;
+                bazookaAssignments[currentPlayer] = true;
+            }
+
+        }
+        else if (bazooka == null)
+        {
+            Debug.LogError("Bazooka is not assigned to player");
+        }
+        else
+        {
+            Debug.LogError("Bazooka prefab couldn't be found");
+        }
+    }
+
+    private void UnassignBazooka(int currentPlayer)
+    {
+        if (bazooka != null && bazookaAssignments[currentPlayer])
+        {
+            bazooka.transform.SetParent(null);
+            bazookaAssignments[currentPlayer] = false;
+        }
+    }
+    private void ShootBazooka(GameObject currPlayer)
+    {
+        if (bulletPrefab != null)
+        {
+            if (bazooka != null)
+            {
+                Transform shootingPoint = bazooka.transform.Find("shooting_point");
+                if (shootingPoint != null)
+                {
+                    GameObject shootingBullet = Instantiate(bulletPrefab, shootingPoint.position, Quaternion.identity);
+
+                    Bullet Bullet = shootingBullet.GetComponent<Bullet>();
+                    if (Bullet != null)
+                    {
+                        Bullet.SetShootingPoint(shootingPoint.position);
+                    }
+                }
+                else
+                {
+                    Debug.LogError("No shooting_point found in bazooka");
+                }
+            }
+            else
+            {
+                Debug.LogError("Bazooka gameObject has not been found");
             }
         }
         else
         {
-            Debug.Log("bazooka not found");
+            Debug.LogError("bulletPrefab is not assigned");
         }
-        Transform bulletSpawnPoint = bazooka.transform.Find("shooting_point");
-        GameObject go = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
-        Bullet bullet = go.GetComponent<Bullet>();
     }
     private void FixedUpdate()
     {

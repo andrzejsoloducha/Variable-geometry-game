@@ -130,12 +130,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 0}
+  bulletPrefab: {fileID: 7963568831271470675, guid: 0e083aeabb1b9d44081d29d99854ae2b, type: 3}
   rigidbodies: []
   boxSize: {x: 0, y: 0}
-  castDistance: 0
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
   currentPlayer: 0
-  players: []
+  playersArray: []
+  bazookaPrefab: {fileID: 1845223257722909964, guid: f802cc4ac5ee11340944f1cb6292fe98, type: 3}
+  bazooka: {fileID: 0}
   playerLayerName: Player
+  scale: {x: 0, y: 0, z: 0}
+  shootingForce: 10
