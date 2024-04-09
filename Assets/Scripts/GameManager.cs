@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public float turnTime = 5.0f;
-    public float currentTime = 0f;
+    public float turnTime;
+    public float currentTime;
 
-    public int totalPlayers = 3;
+    public int totalPlayers;
     public int currentPlayer = 0;
     public bool actionTaken = false;
 

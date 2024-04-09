@@ -93,7 +93,7 @@ public class Player : MonoBehaviour
             rigidbodies[currentPlayer].velocity = new Vector2(rigidbodies[currentPlayer].velocity.x, rigidbodies[currentPlayer].velocity.y * 0.5f);
         }
 
-        if (currPlayer == gameObject)
+        if (!bazookaAssignments[currentPlayer])
         {
             AssignBazooka(currentPlayer, currPlayer);
         }
@@ -181,7 +181,7 @@ public class Player : MonoBehaviour
             }
             else
             {
-                Debug.LogError("Bazooka gameObject has not been found");
+                Debug.LogError("Bazooka has not been found");
             }
         }
         else
