@@ -97,11 +97,8 @@ public class Player : MonoBehaviour
         {
             AssignBazooka(currentPlayer, currPlayer);
         }
-        else
-        {
-            UnassignBazooka(currentPlayer);
-        }
-
+        int previousPlayer = currentPlayer - 1;
+        UnassignBazooka(previousPlayer);
         StickBazookaToPlayer();
 
         if (Input.GetButtonDown("Fire1"))
@@ -149,12 +146,12 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void UnassignBazooka(int currentPlayer)
+    private void UnassignBazooka(int player)
     {
-        if (bazooka != null && bazookaAssignments[currentPlayer])
+        if (bazooka != null && bazookaAssignments[player])
         {
             bazooka.transform.SetParent(null);
-            bazookaAssignments[currentPlayer] = false;
+            bazookaAssignments[player] = false;
         }
     }
     private void ShootBazooka(GameObject currPlayer)
