@@ -34,12 +34,7 @@ public class turnTimer : MonoBehaviour
 
     void SwitchPlayer()
     {
-        gameManager.currentPlayer += 1;
-
-        if (gameManager.currentPlayer >= gameManager.totalPlayers)
-        {
-            gameManager.currentPlayer = 0;
-        }
+        gameManager.currentPlayer = (gameManager.currentPlayer + 1) % gameManager.totalPlayers;
     }
 }
 

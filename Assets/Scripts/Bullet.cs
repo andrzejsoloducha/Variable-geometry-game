@@ -25,6 +25,8 @@ public class Bullet : MonoBehaviour
         {
             rb.velocity = direction * speed;
         }
+
+        Destroy(gameObject, 5f);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

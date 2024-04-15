@@ -9,10 +9,8 @@ public class PlayerGenerator : MonoBehaviour
     public Tilemap tilemap;
     public GameObject playerPrefab;
     public Vector3Int cellPosition;
-
     public GameManager gameManager;
     private List<Vector3> availablePlaces;
-
     public string playerLayerName = "Player";
 
     void Start()
@@ -68,12 +66,12 @@ public class PlayerGenerator : MonoBehaviour
                     if (i % 2 != 0)
                     {
                         playerSpriteRenderer.color = Color.red;
-                        playerObject.name = "Player" + i + "Red";
+                        playerObject.name = "Player_" + i + "_team_red";
                         playerComponent.team = "red";
                     }
                     else
                     {
-                        playerObject.name = "Player" + i + "Blue";
+                        playerObject.name = "Player_" + i + "_team_blue";
                         playerComponent.team = "blue";
                     }
                 }
