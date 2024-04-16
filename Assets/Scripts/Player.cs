@@ -38,7 +38,9 @@ public class Player : MonoBehaviour
             players.Add(player);
         }
 
-        InstantiateBazookas(bazookaPrefab, players, bazookas);
+        GameObject playerObject = gameObject;
+        InstantiateBazooka(playerObject, bazookas, index);
+
         rigidbodies = new Rigidbody2D[playersArray.Length];
         isFacingRight = new bool[playersArray.Length];
 
@@ -51,22 +53,20 @@ public class Player : MonoBehaviour
         
     }
 
-
     void Update()
     {
         int currentPlayer = gameManager.currentPlayer;
         GameObject currPlayer = GetPlayer(currentPlayer);
 
-        CheckPlayerInput();
-        DeactivateBazooka(bazookas, currentPlayer);
-        ActivateBazooka(bazookas, currentPlayer);
-        StickBazookaToPlayer(currentPlayer, bazookas);
+        CheckPlayerInput(currentPlayer);
+        DeactivateBazooka(currentPlayer, bazookas);
+        ActivateBazooka(currentPlayer, bazookas);
+        StickBazookaToPlayer();
         Flip(currentPlayer);
     }
 
-    private void CheckPlayerInput()
+    private void CheckPlayerInput(int currentPlayer)
     {
-        int currentPlayer = gameManager.currentPlayer;
         Rigidbody2D rb = rigidbodies[currentPlayer];
 
         horizontal = Input.GetAxisRaw("Horizontal");
@@ -86,31 +86,24 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void InstantiateBazookas(GameObject bazookaPrefab, List<GameObject> players, List<GameObject> bazookas)
+    public void InstantiateBazooka(GameObject playerObject, List<GameObject> bazookas)
     {
-
-        for (int i = 0; i < players.Count; i++)
-        {
-            GameObject playerObject = players[i];
-            GameObject bazooka = Instantiate(bazookaPrefab, playerObject.transform.position, Quaternion.identity);
-            bazooka.transform.SetParent(playerObject.transform);
-            Vector3 bazookaOffset = new Vector3(0.3f, -0.15f, 0f);
-            bazooka.transform.localPosition = bazookaOffset;
-            bazooka.tag = "bazooka";
-            bazooka.name = "Bazooka_" + i;
-            bazooka.SetActive(false);
-            bazookas.Add(bazooka);
-            Debug.Log("index i: " + i);
-        }
-
-
+        GameObject bazooka = Instantiate(bazookaPrefab, playerObject.transform.position, Quaternion.identity);
+        bazooka.transform.SetParent(playerObject.transform);
+        Vector3 bazookaOffset = new Vector3(0.3f, -0.15f, 0f);
+        bazooka.transform.localPosition = bazookaOffset;
+        bazooka.tag = "bazooka";
+        bazooka.name = "Bazooka_";
+        bazooka.SetActive(false);
+        bazookas.Add(bazooka);
     }
-    private void ActivateBazooka(List<GameObject> bazookas, int currentPlayer)
+
+    public void ActivateBazooka(int currentPlayer, List<GameObject> bazookas)
     {
         bazookas[currentPlayer].SetActive(true);
     }
 
-    private void DeactivateBazooka(List<GameObject> bazookas, int currentPlayer)
+    public void DeactivateBazooka(int currentPlayer, List<GameObject> bazookas)
     {
         int previousPlayer = (currentPlayer - 1 + bazookas.Count) % bazookas.Count;
         GameObject bazooka = bazookas[previousPlayer];
@@ -139,7 +132,7 @@ public class Player : MonoBehaviour
         set { _team = value.ToLower(); }
     }
 
-    private void StickBazookaToPlayer(int currentPlayer, List<GameObject> bazookas)
+    private void StickBazookaToPlayer()
     {
         Vector3 bazookaOffset = new Vector3(0.3f, -0.15f, 0f);
         GameObject bazooka = bazookas[currentPlayer];
