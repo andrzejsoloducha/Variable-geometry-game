@@ -294,9 +294,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilemap: {fileID: 606479971}
-  playerPrefab: {fileID: 8785844599905495616, guid: b7bdd095616daf34093e9a9988a07ce8, type: 3}
+  playerPrefab: {fileID: 4899319147783074695, guid: a3955ab8a6eef6942ad654581e712b2f, type: 3}
   cellPosition: {x: 0, y: 0, z: 0}
-  gameManager: {fileID: 0}
+  gameManager: {fileID: 2004031350}
   playerLayerName: Player
 --- !u!483693784 &606479970
 TilemapRenderer:

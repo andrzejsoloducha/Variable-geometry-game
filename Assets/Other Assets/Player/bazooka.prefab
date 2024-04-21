@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8757609506882061199}
   - component: {fileID: 4239012503336862200}
   m_Layer: 6
-  m_Name: bazooka_prefab
+  m_Name: bazooka
   m_TagString: weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

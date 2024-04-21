@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 
-public class PlayerGenerator : MonoBehaviour
+public class PlayerManager : MonoBehaviour
 {
     public Tilemap tilemap;
     public GameObject playerPrefab;
