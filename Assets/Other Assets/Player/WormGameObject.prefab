@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 465664094991697323}
   m_Layer: 6
   m_Name: constructor
-  m_TagString: Untagged
+  m_TagString: constructor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -178,7 +178,7 @@ GameObject:
   - component: {fileID: 9066128304774966398}
   m_Layer: 6
   m_Name: driller
-  m_TagString: weapon
+  m_TagString: driller
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -543,7 +543,7 @@ GameObject:
   - component: {fileID: 6246397127830052014}
   m_Layer: 6
   m_Name: bazooka
-  m_TagString: weapon
+  m_TagString: bazooka
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

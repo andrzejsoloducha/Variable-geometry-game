@@ -27,9 +27,12 @@ public class Player : MonoBehaviour
     public string playerLayerName = "Player";
     public Vector3 scale;
     private string _team;
+    public weaponScript weaponSc;
+
 
     void Start()
     {
+        weaponSc = GameObject.Find("weaponHolder").GetComponent<weaponScript>();
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         GameObject[] playersArray = GameObject.FindGameObjectsWithTag("Player");
 
@@ -37,9 +40,6 @@ public class Player : MonoBehaviour
         {
             players.Add(player);
         }
-
-        //GameObject playerObject = gameObject;
-        //InstantiateBazooka(playerObject, bazookas);
 
         rigidbodies = new Rigidbody2D[gameManager.totalPlayers];
         isFacingRight = new bool[gameManager.totalPlayers];
@@ -59,9 +59,6 @@ public class Player : MonoBehaviour
         GameObject currPlayer = GetPlayer(currentPlayer);
 
         CheckPlayerInput(currentPlayer);
-        //DeactivateBazooka(currentPlayer, bazookas);
-        //ActivateBazooka(currentPlayer, bazookas);
-        //StickBazookaToPlayer();
         Flip(currentPlayer);
     }
 
@@ -82,35 +79,9 @@ public class Player : MonoBehaviour
 
         if (Input.GetButtonDown("Fire1"))
         {
-            //ShootBazooka(currentPlayer);
+            weaponSc.ShootBazooka();
         }
     }
-
-    //public void InstantiateBazooka(GameObject playerObject, List<GameObject> bazookas)
-    //{
-    //    GameObject bazooka = Instantiate(bazookaPrefab, playerObject.transform.position, Quaternion.identity);
-    //    bazooka.transform.SetParent(playerObject.transform);
-    //    Vector3 bazookaOffset = new Vector3(0.3f, -0.15f, 0f);
-    //    bazooka.transform.localPosition = bazookaOffset;
-    //    bazooka.tag = "bazooka";
-    //    bazooka.SetActive(false);
-    //    bazookas.Add(bazooka);
-    //}
-
-    //public void ActivateBazooka(int currentPlayer, List<GameObject> bazookas)
-    //{
-    //    bazookas[currentPlayer].SetActive(true);
-    //}
-
-    //public void DeactivateBazooka(int currentPlayer, List<GameObject> bazookas)
-    //{
-    //    int previousPlayer = (currentPlayer - 1 + bazookas.Count) % bazookas.Count;
-    //    GameObject bazooka = bazookas[previousPlayer];
-    //    if (bazooka.activeSelf)
-    //    {
-    //        bazooka.SetActive(false);
-    //    }
-    //}
 
     public GameObject GetPlayer(int index)
     {
@@ -130,17 +101,6 @@ public class Player : MonoBehaviour
         get { return _team; }
         set { _team = value.ToLower(); }
     }
-
-    //private void StickBazookaToPlayer()
-    //{
-    //    Vector3 bazookaOffset = new Vector3(0.3f, -0.15f, 0f);
-    //    GameObject bazooka = bazookas[currentPlayer];
-    //    if (bazooka != null && bazooka.transform.parent == transform)
-    //    {
-    //        bazooka.transform.position = transform.position + bazookaOffset;
-    //        bazooka.transform.rotation = transform.rotation;
-    //    }
-    //}
 
     //private void ShootBazooka(int currentPlayer, List<GameObject> bazookas, GameObject bulletPrefab)
     //{
