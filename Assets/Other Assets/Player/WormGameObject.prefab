@@ -93,7 +93,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7425538629631447864}
-  - component: {fileID: 4705600477877108641}
   m_Layer: 6
   m_Name: weaponHolder
   m_TagString: Untagged
@@ -119,22 +118,6 @@ Transform:
   m_Father: {fileID: 4818286265936320032}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4705600477877108641
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1844749034747310947}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cdaf7aeec0e67224c84c90d6db211135, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentWeaponIndex: 0
-  weapons: []
-  weaponHolder: {fileID: 1844749034747310947}
-  currentWeapon: {fileID: 0}
 --- !u!1 &3158755271743450884
 GameObject:
   m_ObjectHideFlags: 0
@@ -283,7 +266,7 @@ Transform:
   - {fileID: 4172742076008929006}
   - {fileID: 7425538629631447864}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &4453723027770707182
 SpriteRenderer:
@@ -349,20 +332,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad8a87139e1a6df4bbffad7a8e646c9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 0}
-  bulletPrefab: {fileID: 7963568831271470675, guid: 0e083aeabb1b9d44081d29d99854ae2b, type: 3}
-  rigidbodies: []
-  boxSize: {x: 0, y: 0}
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 8
-  currentPlayer: 0
-  playersArray: []
-  bazookaPrefab: {fileID: 1845223257722909964, guid: f802cc4ac5ee11340944f1cb6292fe98, type: 3}
-  players: []
-  bazookas: []
-  playerLayerName: Player
-  scale: {x: 0, y: 0, z: 0}
 --- !u!1 &5473833634986579067
 GameObject:
   m_ObjectHideFlags: 0

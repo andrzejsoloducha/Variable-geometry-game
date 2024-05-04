@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -6,18 +5,24 @@ using UnityEngine.Tilemaps;
 
 public class PlayerManager : MonoBehaviour
 {
-    public Tilemap tilemap;
+    public GameObject Tilemap;
     public GameObject playerPrefab;
-    public Vector3Int cellPosition;
     public GameManager gameManager;
     private List<Vector3> availablePlaces;
     public string playerLayerName = "Player";
+    public List<Player> players;
+    private Tilemap tilemap;
 
     void Start()
     {
-        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        FindPlacesToRespawn();
+        Respawn();
+    }
+
+    private void FindPlacesToRespawn()
+    {
         availablePlaces = new List<Vector3>();
-        tilemap = GetComponent<Tilemap>();
+        tilemap = Tilemap.GetComponent<Tilemap>();
 
         for (int x = tilemap.cellBounds.xMin; x < tilemap.cellBounds.xMax; x++)
         {
@@ -27,55 +32,50 @@ public class PlayerManager : MonoBehaviour
                 Vector3 position = tilemap.GetCellCenterWorld(cell);
 
                 if (tilemap.GetTile(cell) is null)
-                //if (tilemap.HasTile(cell))
                 {
                     availablePlaces.Add(position);
                 }
             }
         }
-        Respawn();
     }
 
-    void Respawn()
+    private void Respawn()
     {
-        int playerLayer = LayerMask.NameToLayer(playerLayerName);
-        for (int i = 0; i < gameManager.totalPlayers; i++)
+        var playerLayer = LayerMask.NameToLayer(playerLayerName);
+        for (var i = 0; i < gameManager.totalPlayers; i++)
         {
             if (availablePlaces.Count > 0)
             {
-                int index = Random.Range(0, availablePlaces.Count);
+                var index = Random.Range(0, availablePlaces.Count);
 
-                Vector3 position = availablePlaces[index];
-                GameObject playerObject = Instantiate(playerPrefab, position, Quaternion.identity);
-                Player playerComponent = playerObject.GetComponent<Player>();
-                Rigidbody2D playerRigidbody2D = playerObject.AddComponent<Rigidbody2D>();
-                BoxCollider2D playerCollider2D = playerObject.AddComponent<BoxCollider2D>();
+                var position = availablePlaces[index];
+                var playerObject = Instantiate(playerPrefab, position, Quaternion.identity);
+                var playerRigidbody2D = playerObject.AddComponent<Rigidbody2D>();
+                playerObject.AddComponent<BoxCollider2D>();
                 playerRigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
                 
                 playerObject.tag = "Player";
                 playerObject.layer = playerLayer;
-
-                SpriteRenderer playerSpriteRenderer = playerObject.GetComponent<SpriteRenderer>();
+                var playerSpriteRenderer = playerObject.GetComponent<SpriteRenderer>();
                 if (playerSpriteRenderer == null)
                 {
                     playerSpriteRenderer = playerObject.AddComponent<SpriteRenderer>();
                 }
-
-                if (gameManager.deathmatch == false)
+                
+                if (i % 2 != 0)
                 {
-                    if (i % 2 != 0)
-                    {
-                        playerSpriteRenderer.color = Color.red;
-                        playerObject.name = "Player_" + i + "_team_red";
-                        playerComponent.team = "red";
-                    }
-                    else
-                    {
-                        playerObject.name = "Player_" + i + "_team_blue";
-                        playerComponent.team = "blue";
-                    }
+                    playerSpriteRenderer.color = Color.red;
+                    playerObject.name = "Player_" + i + "_team_red";
+                    //playerComponent.Team = "red";
+                }
+                else
+                {
+                    playerObject.name = "Player_" + i + "_team_blue";
+                    //playerComponent.Team = "blue";
                 }
 
+                var playerComponent = playerObject.GetComponent<Player>();
+                players.Add(playerComponent);
                 availablePlaces.RemoveAt(index);
             }
 

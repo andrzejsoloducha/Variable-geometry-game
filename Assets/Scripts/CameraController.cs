@@ -1,13 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 public class CameraController : MonoBehaviour
 {
     public GameManager gameManager;
     public float padding = 1.0f;
-    private Camera mainCamera;
+    public Camera mainCamera;
 
     void Start()
     {
@@ -21,7 +18,6 @@ public class CameraController : MonoBehaviour
         }
 
         AdjustCameraSize();
-        CalculatePixels();
     }
 
     void AdjustCameraSize()
@@ -45,20 +41,5 @@ public class CameraController : MonoBehaviour
         }
 
         mainCamera.orthographicSize = targetOrthoSize / 2;
-
-        //Debug.Log("Pixel width: " + mainCamera.pixelWidth + ", and height: " + mainCamera.pixelHeight);
-    }
-
-    void CalculatePixels()
-    {
-        float viewportWidth = mainCamera.rect.width;
-        float viewportHeight = mainCamera.rect.height;
-
-        int screenWidth = Screen.width;
-        int screenHeight = Screen.height;
-
-        int pixelsInViewport = Mathf.RoundToInt(viewportWidth * screenWidth) * Mathf.RoundToInt(viewportHeight * screenHeight);
-
-        //Debug.Log("Pixels in camera viewport: " + pixelsInViewport);
     }
 }

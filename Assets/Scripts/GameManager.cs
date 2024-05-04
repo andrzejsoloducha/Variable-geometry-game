@@ -1,27 +1,26 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager>
 {
     public float turnTime;
     public float currentTime;
 
     public int totalPlayers;
-    public int currentPlayer = 0;
-    public bool actionTaken = false;
-
-
-    public int mapWidth = 60;
-    public int mapHeight = 40;
-    public int[,] map;
-
-    public bool deathmatch = false;
+    public int currentPlayerIndex;
+    public Player currentPlayer;
+    private PlayerManager playerManager;
+    private List<Player> players;
+    public int mapWidth;
+    public int mapHeight;
+    public int[,] Map;
     public Text timeLeftText;
 
     void Start()
     {
+        playerManager = GetComponent<PlayerManager>();
+        SetCurrentPlayer();
         timeLeftText = GameObject.Find("timeLeftText").GetComponent<Text>();
         currentTime = turnTime;
     }
@@ -31,21 +30,33 @@ public class GameManager : MonoBehaviour
         currentTime -= 1 * Time.deltaTime;
         timeLeftText.text = currentTime.ToString("0.0");
 
-        if (currentTime <= 0 | actionTaken)
+        if (currentTime <= 0)
         {
-            EndTurn();
-            SwitchPlayer();
+            NextPlayerTurnProcedure();
         }
     }
 
-    void EndTurn()
+    public void NextPlayerTurnProcedure()
     {
-        currentTime = turnTime;
-        actionTaken = false;
+        currentTime = turnTime; // reset timer
+        SwitchPlayer(); // increment current player index
+        SetCurrentPlayer();
+        NotifyCurrentPlayer();
+    }
+
+    private void NotifyCurrentPlayer()
+    {
+        currentPlayer.OnTurnStarted();
     }
 
     void SwitchPlayer()
     {
-        currentPlayer = (currentPlayer + 1) % totalPlayers;
+        currentPlayerIndex = (currentPlayerIndex + 1) % totalPlayers;
+        // to do: switching between teams
+    }
+
+    private void SetCurrentPlayer()
+    {
+        currentPlayer = playerManager.players[currentPlayerIndex];
     }
 }

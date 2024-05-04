@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
@@ -45,10 +43,9 @@ public class Bullet : MonoBehaviour
         {
             if (collider.CompareTag("Player") || collider.CompareTag("Ground"))
             {
-                //collider.GetComponent<PlayerHealth>().TakeDamage(damage);
+                //collider.GetComponent<Health>().TakeDamage(damage);
             }
         }
-
         Destroy(gameObject);
     }
 }

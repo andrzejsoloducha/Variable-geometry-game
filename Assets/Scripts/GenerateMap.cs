@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -26,19 +25,19 @@ public class GenerateMap : MonoBehaviour
 
         map = GenerateArray(width, height, true);
         map = PerlinNoiseCave(map, Random.Range(0.0001f, 0.4f), true);
-        gameManager.map = map;
+        gameManager.Map = map;
 
         RenderMap(map, tilemap, tile);
     }
 
 
-    public void ClearMap()
+    private void ClearMap()
     {
         tilemap.ClearAllTiles();
     }
 
 
-    public static int[,] GenerateArray(int width, int height, bool empty)
+    private static int[,] GenerateArray(int width, int height, bool empty)
     {
         int[,] map = new int[width, height];
         for (int x = 0; x < map.GetUpperBound(0); x++)
@@ -59,7 +58,7 @@ public class GenerateMap : MonoBehaviour
     }
 
 
-    public static void RenderMap(int[,] map, Tilemap tilemap, TileBase tile)
+    private static void RenderMap(int[,] map, Tilemap tilemap, TileBase tile)
      {
         for (int x = 0; x < map.GetUpperBound(0); x++)
         {
@@ -72,8 +71,9 @@ public class GenerateMap : MonoBehaviour
                 }
             }
         }
-    }
-    public static int[,] PerlinNoise(int[,] map, float seed)
+     }
+
+    private static int[,] PerlinNoise(int[,] map, float seed)
     {
         int newPoint;
         float reduction = 0.5f;
@@ -141,7 +141,7 @@ public class GenerateMap : MonoBehaviour
     }
 
 
-    public static int[,] PerlinNoiseCave(int[,] map, float modifier, bool edgesAreWalls)
+    private static int[,] PerlinNoiseCave(int[,] map, float modifier, bool edgesAreWalls)
     {
         int newPoint;
         for (int x = 0; x < map.GetUpperBound(0); x++)
