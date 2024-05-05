@@ -785,6 +785,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Tilemap: {fileID: 606479966}
   playerPrefab: {fileID: 4899319147783074695, guid: a3955ab8a6eef6942ad654581e712b2f, type: 3}
-  gameManager: {fileID: 0}
+  gameManager: {fileID: 2004031350}
   playerLayerName: Player
   players: []
