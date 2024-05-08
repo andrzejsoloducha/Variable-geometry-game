@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using PlayerManagment;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,21 +11,19 @@ public class GameManager : Singleton<GameManager>
     public int currentPlayerIndex;
     public Player currentPlayer;
     private PlayerManager playerManager;
-    private List<Player> players;
     public int mapWidth;
     public int mapHeight;
     public int[,] Map;
     public Text timeLeftText;
 
-    void Start()
+    private void Start()
     {
-        playerManager = GetComponent<PlayerManager>();
         SetCurrentPlayer();
         timeLeftText = GameObject.Find("timeLeftText").GetComponent<Text>();
         currentTime = turnTime;
     }
 
-    void Update()
+    private void Update()
     {
         currentTime -= 1 * Time.deltaTime;
         timeLeftText.text = currentTime.ToString("0.0");
@@ -49,14 +47,17 @@ public class GameManager : Singleton<GameManager>
         currentPlayer.OnTurnStarted();
     }
 
-    void SwitchPlayer()
+    private void SwitchPlayer()
     {
         currentPlayerIndex = (currentPlayerIndex + 1) % totalPlayers;
         // to do: switching between teams
     }
 
+    // ReSharper disable Unity.PerformanceAnalysis
     private void SetCurrentPlayer()
     {
+        //Debug.Log("Players count: " + playerManager.players.Count);
         currentPlayer = playerManager.players[currentPlayerIndex];
+        
     }
 }

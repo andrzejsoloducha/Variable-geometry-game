@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 
-public interface IBuildable
+namespace Interfaces
 {
-    void Build(Terrain terrain);
+    public interface IBuildable
+    {
+        void Build(Terrain terrain);
+    }
 }

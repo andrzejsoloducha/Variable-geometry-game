@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 
-public interface IMovable
+namespace Interfaces
 {
-    void Move(Vector2 direction);
-    public int MoveRange { get; set; }
+    public interface IMovable
+    {
+        void Move(Vector2 direction);
+        public int MoveRange { get; set; }
+    }
 }

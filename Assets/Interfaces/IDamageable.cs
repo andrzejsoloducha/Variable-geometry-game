@@ -1,6 +1,9 @@
-﻿public interface IDamageable
+﻿namespace Interfaces
 {
-    public int Health { get; set; }
-    public void Die();
-    public void TakeDamage(int damage);
+    public interface IDamageable
+    {
+        public int Health { get; set; }
+        public void Die();
+        public void TakeDamage(int damage);
+    }
 }

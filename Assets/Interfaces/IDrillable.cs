@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 
-public interface IDrillable
+namespace Interfaces
 {
-    void Drill(Terrain terrain);
+    public interface IDrillable
+    {
+        void Drill(Terrain terrain);
+    }
 }

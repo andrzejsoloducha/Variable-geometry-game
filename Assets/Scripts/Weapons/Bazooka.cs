@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Interfaces;
+using UnityEngine;
+using Weapons;
 
 public class Bazooka : MonoBehaviour, IShootable
 {

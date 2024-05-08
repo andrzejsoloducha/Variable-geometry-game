@@ -1,4 +1,9 @@
-﻿public interface IShootable
+﻿using Weapons;
+
+namespace Interfaces
 {
-    void Shoot(Bullet bullet);
+    public interface IShootable
+    {
+        void Shoot(Bullet bullet);
+    }
 }

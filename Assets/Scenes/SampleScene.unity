@@ -294,11 +294,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6156789be09bae498bf293c153ac394, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Tilemap: {fileID: 606479966}
   playerPrefab: {fileID: 4899319147783074695, guid: a3955ab8a6eef6942ad654581e712b2f, type: 3}
   gameManager: {fileID: 2004031350}
   playerLayerName: Player
   players: []
+  tilemap: {fileID: 606479971}
 --- !u!483693784 &606479970
 TilemapRenderer:
   m_ObjectHideFlags: 0
@@ -728,7 +728,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2004031351}
   - component: {fileID: 2004031350}
-  - component: {fileID: 2004031352}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -771,20 +770,3 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2004031352
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2004031349}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6156789be09bae498bf293c153ac394, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Tilemap: {fileID: 606479966}
-  playerPrefab: {fileID: 4899319147783074695, guid: a3955ab8a6eef6942ad654581e712b2f, type: 3}
-  gameManager: {fileID: 2004031350}
-  playerLayerName: Player
-  players: []
