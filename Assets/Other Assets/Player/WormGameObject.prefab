@@ -244,6 +244,7 @@ GameObject:
   - component: {fileID: 4818286265936320032}
   - component: {fileID: 4453723027770707182}
   - component: {fileID: 3422195817518589733}
+  - component: {fileID: 5467411400591575351}
   m_Layer: 6
   m_Name: WormGameObject
   m_TagString: Player
@@ -330,6 +331,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ad8a87139e1a6df4bbffad7a8e646c9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5467411400591575351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4899319147783074695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8f77f3a04e3464f9e41da52d24e68f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &5473833634986579067
