@@ -8,18 +8,27 @@ public class Player : MonoBehaviour, IMovable, IJumpable, IDamageable
 
     public int MoveSpeed { get; set; }
     private Rigidbody2D rb;
+    private PlayerInputHandler playerInputHandler;
     private bool isFacingRight;
     public string Team { get; set; }
+    
     private void Start()
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
+        playerInputHandler = gameObject.GetComponent<PlayerInputHandler>();
         JumpForce = 5f;
         MoveSpeed = 10;
     }
 
-    public void OnTurnStarted()
+    public void OnTurnStart()
     {
-        // turn starts
+        playerInputHandler.enabled = true;
+        playerInputHandler.SetPlayer(gameObject.GetComponent<Player>());
+    }
+
+    public void OnTurnEnd()
+    {
+        playerInputHandler.enabled = false;
     }
 
     public void Move(float direction)
@@ -59,10 +68,7 @@ public class Player : MonoBehaviour, IMovable, IJumpable, IDamageable
             {
                 spr.flipX = !spr.flipX;
             }
-            else
-            {
-                Debug.LogWarning("Sprite renderer not found on the player");
-            }
+
         }
 
     }

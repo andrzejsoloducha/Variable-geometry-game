@@ -7,15 +7,21 @@ public class PlayerInputHandler : MonoBehaviour
     private GameManager gameManager;
     private float direction;
 
-
-    public void SetPlayer(GameObject currentPlayer)
+    public void SetPlayer(Player currentPlayer)
     {
-        player = currentPlayer.GetComponent<Player>();
+        player = currentPlayer;
     }
-    public void CheckKeyboardInput()
+
+    private void FixedUpdate()
+    {
+        CheckKeyboardInput();
+    }
+
+    private void CheckKeyboardInput()
     {
         CheckForLeftRightMovement();
         CheckForJump();
+        
     }
 
     // ReSharper disable Unity.PerformanceAnalysis
@@ -30,7 +36,7 @@ public class PlayerInputHandler : MonoBehaviour
     private void CheckForLeftRightMovement()
     {
         direction = Input.GetAxisRaw("Horizontal");
-        player.Flip(direction);
+        //player.Flip(direction);
         player.Move(direction);
     }
 }
