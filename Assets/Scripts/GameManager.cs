@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Google.Protobuf.Collections;
 using JetBrains.Annotations;
+using Tools;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -11,16 +11,12 @@ public class GameManager : Singleton<GameManager>
 {
     public float turnTime;
     public float currentTime;
-    
     public int mapWidth;
     public int mapHeight;
-    public int[,] Map;
     public Text timeLeftText;
 
     public int totalPlayers;
-
-    private Team? _winner;
-
+    private Team? winner;
     public List<GameObject> Players => SceneManager.GetActiveScene()
         .GetRootGameObjects()
         .ToList()
@@ -56,11 +52,13 @@ public class GameManager : Singleton<GameManager>
         originalRoster = PlayersComponents;
         timeLeftText = GameObject.Find("timeLeftText").GetComponent<Text>();
         currentTime = turnTime;
+        PathFinder.Initialize();
+        PathFinder.FindPathsToEnemies(CurrentPlayer, PlayersComponents);
     }
 
     private void Update()
     {
-        if (_winner == null)
+        if (winner == null)
         {
             currentTime -= 1 * Time.deltaTime;
             timeLeftText.text = currentTime.ToString("0.0");
@@ -68,6 +66,7 @@ public class GameManager : Singleton<GameManager>
             if (currentTime <= 0 || !BothTeamsActive)
             {
                 NextTurnProcedure();
+                PathFinder.FindPathsToEnemies(CurrentPlayer, PlayersComponents);
             }
             else
             {
@@ -76,9 +75,9 @@ public class GameManager : Singleton<GameManager>
         }
         else
         {
-            timeLeftText.text = "WINNER: " + _winner;
+            timeLeftText.text = "WINNER: " + winner;
             timeLeftText.horizontalOverflow = HorizontalWrapMode.Overflow;
-            timeLeftText.color = _winner switch
+            timeLeftText.color = winner switch
             {
                 Team.Blue => Color.blue,
                 Team.Red => Color.red,
@@ -150,17 +149,16 @@ public class GameManager : Singleton<GameManager>
 
             var score = blueTeam.Count() - redTeam.Count();
 
-            _winner = score switch
+            winner = score switch
             {
                 > 0 => Team.Blue,
                 0   => Team.None,
                 < 0 => Team.Red
             };
             
-            Debug.Log("WINNER: " + _winner);
+            Debug.Log("WINNER: " + winner);
         }
     }
 
     private bool BothTeamsActive => blueTeam.Count > 0 && redTeam.Count > 0;
-
 }

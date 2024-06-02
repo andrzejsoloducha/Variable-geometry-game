@@ -25,7 +25,6 @@ public class GenerateMap : MonoBehaviour
 
         var map = GenerateArray(width, height, true);
         map = PerlinNoiseCave(map, Random.Range(0.0001f, 0.4f), true);
-        gameManager.Map = map;
 
         RenderMap(map, tilemap, tile);
     }
