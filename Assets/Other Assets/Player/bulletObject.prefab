@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6431711036783598226}
   - component: {fileID: 322810137297844901}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: bulletPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4597695219946375025}
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 13.312, y: 17.348, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.24353042, y: 0.16262038, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -95,9 +95,10 @@ GameObject:
   - component: {fileID: 3258152810620941516}
   - component: {fileID: 5730685400237910624}
   - component: {fileID: 307217350868803543}
-  m_Layer: 0
+  - component: {fileID: 1011657594043758485}
+  m_Layer: 7
   m_Name: bulletObject
-  m_TagString: Untagged
+  m_TagString: bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -110,13 +111,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7963568831271470675}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 13.239088, y: 17.462555, z: -0.00963928}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6431711036783598226}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &5730685400237910624
 Rigidbody2D:
@@ -130,10 +131,10 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 8.52
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 0
+  m_GravityScale: 2.66
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -157,10 +158,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e60bfaad46eb9d440bb13f3996458ab8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 50
-  targetVector: {x: 0, y: 0, z: 0}
-  lifetime: 10
-  damage: 10
+  speed: 40
+  damageAmplifier: 3
+  explosionPrefab: {fileID: 6813416509558619124, guid: 3b7f2c753d435d647a80f1f047a113e3, type: 3}
+  explosionRadius: 0.7
+--- !u!70 &1011657594043758485
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7963568831271470675}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.021135971}
+  m_Size: {x: 0.34, y: 0.0001}
+  m_Direction: 0
 --- !u!1001 &7908655049831979187
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -173,17 +209,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: bulletPrefab
       objectReference: {fileID: 0}
+    - target: {fileID: 5228128943402616777, guid: 839d5425d8d65884db2e68f826fd1268, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 6135770153436669428, guid: 839d5425d8d65884db2e68f826fd1268, type: 3}
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6135770153436669428, guid: 839d5425d8d65884db2e68f826fd1268, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 13.312
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6135770153436669428, guid: 839d5425d8d65884db2e68f826fd1268, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 17.348
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6135770153436669428, guid: 839d5425d8d65884db2e68f826fd1268, type: 3}
       propertyPath: m_LocalPosition.z

@@ -4,7 +4,7 @@ namespace Interfaces
 {
     public interface IMovable
     {
-        void Move(float direction);
-        public int MoveSpeed { get; set; }
+        void TryMove();
+        public float MoveSpeed { get; set; }
     }
 }

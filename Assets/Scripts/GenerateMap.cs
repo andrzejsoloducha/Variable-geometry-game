@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -14,16 +15,15 @@ public class GenerateMap : MonoBehaviour
     private int height;
 
 
-    void Start()
+    private void Start()
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         width = gameManager.mapWidth;
         height = gameManager.mapHeight;
         ClearMap();
-        int[,] map = new int[width, height];
-        float seed = Time.time;
+        var seed = Time.time;
 
-        map = GenerateArray(width, height, true);
+        var map = GenerateArray(width, height, true);
         map = PerlinNoiseCave(map, Random.Range(0.0001f, 0.4f), true);
         gameManager.Map = map;
 
@@ -39,10 +39,10 @@ public class GenerateMap : MonoBehaviour
 
     private static int[,] GenerateArray(int width, int height, bool empty)
     {
-        int[,] map = new int[width, height];
-        for (int x = 0; x < map.GetUpperBound(0); x++)
+        var map = new int[width, height];
+        for (var x = 0; x < map.GetUpperBound(0); x++)
         {
-            for (int y = 0; y < map.GetUpperBound(1); y++)
+            for (var y = 0; y < map.GetUpperBound(1); y++)
             {
                 if (empty)
                 {
@@ -60,14 +60,20 @@ public class GenerateMap : MonoBehaviour
 
     private static void RenderMap(int[,] map, Tilemap tilemap, TileBase tile)
      {
-        for (int x = 0; x < map.GetUpperBound(0); x++)
+        for (var x = 0; x < map.GetUpperBound(0); x++)
         {
-            for (int y = 0; y < map.GetUpperBound(1); y++)
+            for (var y = 0; y < map.GetUpperBound(1); y++)
             {
                 if (map[x, y] == 1) // 1 = tile, 0 = no tile
                 {
                     tilemap.SetTile(new Vector3Int(x, y, 0), tile);
                     tilemap.SetColliderType(new Vector3Int(x, y, 0), Tile.ColliderType.Sprite);
+                }
+
+                if (map[x, y] == 2) // tutaj jakiś layer nie do rozjebania
+                {
+                    tilemap.SetTile(new Vector3Int(x, y, 0), tile);
+                    
                 }
             }
         }
@@ -75,15 +81,14 @@ public class GenerateMap : MonoBehaviour
 
     private static int[,] PerlinNoise(int[,] map, float seed)
     {
-        int newPoint;
-        float reduction = 0.5f;
+        var reduction = 0.5f;
 
-        for (int x = 0; x < map.GetUpperBound(0); x++)
+        for (var x = 0; x < map.GetUpperBound(0); x++)
         {
-            newPoint = Mathf.FloorToInt((Mathf.PerlinNoise(x, seed) - reduction) * map.GetUpperBound(1));
+            var newPoint = Mathf.FloorToInt((Mathf.PerlinNoise(x, seed) - reduction) * map.GetUpperBound(1));
             newPoint += (map.GetUpperBound(1) / 2);
 
-            for (int y = newPoint; y >= 0; y--)
+            for (var y = newPoint; y >= 0; y--)
             {
                 map[x, y] = 1;
             }
@@ -96,35 +101,32 @@ public class GenerateMap : MonoBehaviour
     {
         if (interval > 1)
         {
-            int newPoint, points;
-            float reduction = 0.5f;
+            var reduction = 0.5f;
 
-            Vector2Int currentPos, lastPos;
+            var noiseX = new List<int>();
+            var noiseY = new List<int>();
 
-            List<int> noiseX = new List<int>();
-            List<int> noiseY = new List<int>();
-
-            for (int x = 0; x < map.GetUpperBound(0); x += interval)
+            for (var x = 0; x < map.GetUpperBound(0); x += interval)
             {
-                newPoint = Mathf.FloorToInt((Mathf.PerlinNoise(x, (seed * reduction))) * map.GetUpperBound(1));
+                var newPoint = Mathf.FloorToInt((Mathf.PerlinNoise(x, (seed * reduction))) * map.GetUpperBound(1));
                 noiseY.Add(newPoint);
                 noiseX.Add(x);
             }
 
-            points = noiseY.Count;
+            var points = noiseY.Count;
 
-            for (int i = 1; i < points; i++)
+            for (var i = 1; i < points; i++)
             {
-                currentPos = new Vector2Int(noiseX[i], noiseY[i]);
-                lastPos = new Vector2Int(noiseX[i - 1], noiseY[i - 1]);
+                var currentPos = new Vector2Int(noiseX[i], noiseY[i]);
+                var lastPos = new Vector2Int(noiseX[i - 1], noiseY[i - 1]);
 
                 Vector2 diff = currentPos - lastPos;
-                float heightChange = diff.y / interval;
+                var heightChange = diff.y / interval;
                 float currHeight = lastPos.y;
 
-                for (int x = lastPos.x; x < currentPos.x; x++)
+                for (var x = lastPos.x; x < currentPos.x; x++)
                 {
-                    for (int y = Mathf.FloorToInt(currHeight); y > 0; y--)
+                    for (var y = Mathf.FloorToInt(currHeight); y > 0; y--)
                     {
                         map[x, y] = 1;
                     }
@@ -143,19 +145,18 @@ public class GenerateMap : MonoBehaviour
 
     private static int[,] PerlinNoiseCave(int[,] map, float modifier, bool edgesAreWalls)
     {
-        int newPoint;
-        for (int x = 0; x < map.GetUpperBound(0); x++)
+        for (var x = 0; x < map.GetUpperBound(0); x++)
         {
-            for (int y = 0; y < map.GetUpperBound(1); y++)
+            for (var y = 0; y < map.GetUpperBound(1); y++)
             {
 
                 if (edgesAreWalls && (x == 0 || y == 0 || x == map.GetUpperBound(0) - 1 || y == map.GetUpperBound(1) - 1))
                 {
-                    map[x, y] = 1;
+                    map[x, y] = 2;
                 }
                 else
                 {
-                    newPoint = Mathf.RoundToInt(Mathf.PerlinNoise(x * modifier, y * modifier));
+                    var newPoint = Mathf.RoundToInt(Mathf.PerlinNoise(x * modifier, y * modifier));
                     map[x, y] = newPoint;
                 }
             }

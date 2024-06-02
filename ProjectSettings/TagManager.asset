@@ -9,6 +9,8 @@ TagManager:
   - driller
   - constructor
   - weapon
+  - bullet
+  - Ground
   layers:
   - Default
   - TransparentFX
@@ -17,8 +19,8 @@ TagManager:
   - Water
   - UI
   - Player
-  - 
-  - 
+  - Bullet
+  - Weapon
   - 
   - 
   - 

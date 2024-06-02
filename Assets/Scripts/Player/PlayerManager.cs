@@ -1,15 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+
 public class PlayerManager : MonoBehaviour
 {
     public GameObject playerPrefab;
     public GameManager gameManager;
-    private List<Vector3> availablePlaces;
+    public List<Vector3> availablePlaces;
     public string playerLayerName = "Player";
-    public List<GameObject> players = new List<GameObject>();
+    public List<GameObject> players = new();
     public Tilemap tilemap;
-
+    
     private void Start()
     {
         FindPlacesToRespawn();
@@ -35,11 +36,12 @@ public class PlayerManager : MonoBehaviour
             }
         }
     }
+    
 
     private void Respawn()
     {
         var playerLayer = LayerMask.NameToLayer(playerLayerName);
-        for (int i = 0; i < gameManager.totalPlayers; i++)
+        for (var i = 0; i < gameManager.totalPlayers; i++)
         {
             if (availablePlaces.Count > 0)
             {
@@ -54,7 +56,7 @@ public class PlayerManager : MonoBehaviour
                 playerObject.tag = "Player";
                 playerObject.layer = playerLayer;
                 var playerSpriteRenderer = playerObject.GetComponent<SpriteRenderer>();
-                if (playerSpriteRenderer == null)
+                if (!playerSpriteRenderer)
                 {
                     playerSpriteRenderer = playerObject.AddComponent<SpriteRenderer>();
                 }
@@ -63,13 +65,13 @@ public class PlayerManager : MonoBehaviour
                 if (i % 2 != 0)
                 {
                     playerSpriteRenderer.color = Color.red;
-                    playerObject.name = "Player_" + i + "_team_red";
-                    playerComponent.Team = "red";
+                    playerObject.name = "Player_" + i;
+                    playerComponent.team = Team.Red;
                 }
                 else
                 {
-                    playerObject.name = "Player_" + i + "_team_blue";
-                    playerComponent.Team = "blue";
+                    playerObject.name = "Player_" + i;
+                    playerComponent.team = Team.Blue;
                 }
 
                 players.Add(playerObject);

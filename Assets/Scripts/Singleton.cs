@@ -6,10 +6,10 @@ public class Singleton<T> : MonoBehaviour where T : Component
         {
             get
             {
-                if (_instance == null)
+                if (!_instance)
                 {
                     _instance = (T)FindObjectOfType(typeof(T));
-                    if (_instance == null)
+                    if (!_instance)
                     {
                         SetupInstance();
                     }
@@ -26,7 +26,7 @@ public class Singleton<T> : MonoBehaviour where T : Component
 
         private void RemoveDuplicates()
         {
-            if (_instance == null)
+            if (!_instance)
             {
                 _instance = this as T;
                 DontDestroyOnLoad(gameObject);
@@ -41,9 +41,9 @@ public class Singleton<T> : MonoBehaviour where T : Component
         {
             _instance = (T)FindObjectOfType(typeof(T));
 
-            if (_instance == null)
+            if (!_instance)
             {
-                GameObject gameObj = new GameObject
+                var gameObj = new GameObject
                 {
                     name = typeof(T).Name
                 };
