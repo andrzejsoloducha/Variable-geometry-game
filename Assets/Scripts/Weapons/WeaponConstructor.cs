@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
@@ -11,17 +10,18 @@ public class WeaponConstructor : MonoBehaviour
     private GameObject sqIndicator;
     public int maxTileCount;
     private int remainingTileCount;
-
+    private SquareIndicatorController squareIndicatorController;
     private Tilemap tilemap => SceneManager.GetActiveScene()
-            .GetRootGameObjects()
-            .ToList()
-            .Find(go => go.name == "Grid")
-            .GetComponentInChildren<Tilemap>();
+        .GetRootGameObjects()
+        .ToList()
+        .Find(go => go.name == "Grid")
+        .GetComponentInChildren<Tilemap>();
 
     private void OnEnable()
     {
         remainingTileCount = maxTileCount;
         sqIndicator = Instantiate(squareIndicatorPrefab, transform.position, Quaternion.identity);
+        squareIndicatorController = sqIndicator.GetComponent<SquareIndicatorController>();
     }
 
     private void OnDisable()
@@ -36,18 +36,19 @@ public class WeaponConstructor : MonoBehaviour
         {
             var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             var gridPosition = tilemap.WorldToCell(mousePosition);
-        
-            if (Input.GetMouseButtonDown(0) && IsValidTilePlacement(gridPosition))
+
+            if (Input.GetMouseButtonDown(0) && squareIndicatorController.IsValidTilePlacement(gridPosition))
             {
                 tilemap.SetTile(gridPosition, tilePrefab);
                 remainingTileCount--;
-            
+
                 if (remainingTileCount == 0)
                 {
                     OnDisable();
                     GameManager.Instance.NextTurnProcedure();
                 }
-                if (Mathf.Approximately(GameManager.Instance.currentTime, 0.01f))
+
+                if (Mathf.Approximately(GameManager.Instance.currentTime, 0.05f))
                 {
                     OnDisable();
                 }
@@ -55,9 +56,4 @@ public class WeaponConstructor : MonoBehaviour
         }
 
     }
-    private bool IsValidTilePlacement(Vector3Int gridPosition)
-    {
-        return !tilemap.HasTile(gridPosition);
-    }
-
 }

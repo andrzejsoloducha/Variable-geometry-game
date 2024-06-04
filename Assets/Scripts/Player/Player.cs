@@ -39,12 +39,6 @@ public class Player : MonoBehaviour, IMovable, IJumpable, IDamageable
     {
         var direction = Input.GetAxisRaw("Horizontal");
         rb.velocity = new Vector2(direction * MoveSpeed, rb.velocity.y);
-        if (direction != 0)
-        {
-            lastDirection = new Vector3(direction, 0, 0).normalized;
-        }
-        
-        Flip(lastDirection.x);
     }
 
     public void TryJump()
@@ -81,16 +75,6 @@ public class Player : MonoBehaviour, IMovable, IJumpable, IDamageable
         }
     }
 
-    private void Flip(float direction)
-    {
-        if (direction > 0 && transform.localScale.x < 0 ||
-            direction < 0 && transform.localScale.x > 0)
-        {
-            transform.localScale = new Vector3(-transform.localScale.x, 
-                transform.localScale.y, transform.localScale.z);
-        }
-    }
-
     private bool CanJump()
     {
         var playerLayer = LayerMask.NameToLayer("Player");
@@ -109,8 +93,8 @@ public class Player : MonoBehaviour, IMovable, IJumpable, IDamageable
     
         return canJump;
     }
-    public void TryShoot()
+    public void TryShoot(Vector3 targetPoint = default)
     {
-        CurrentWeapon().GetComponent<Bazooka>().ShootBullet();
+        CurrentWeapon().GetComponent<Bazooka>().ShootBullet(targetPoint);
     }
 }

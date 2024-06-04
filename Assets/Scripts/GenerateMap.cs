@@ -72,7 +72,6 @@ public class GenerateMap : MonoBehaviour
                 if (map[x, y] == 2) // tutaj jakiś layer nie do rozjebania
                 {
                     tilemap.SetTile(new Vector3Int(x, y, 0), tile);
-                    
                 }
             }
         }

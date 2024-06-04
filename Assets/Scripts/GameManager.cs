@@ -17,6 +17,7 @@ public class GameManager : Singleton<GameManager>
 
     public int totalPlayers;
     private Team? winner;
+    private List<GameObject> enemiesInSight;
     public List<GameObject> Players => SceneManager.GetActiveScene()
         .GetRootGameObjects()
         .ToList()
@@ -38,8 +39,6 @@ public class GameManager : Singleton<GameManager>
 
     public bool weaponUsed;
 
-    private List<Player> originalRoster;
-    
     Queue<Player> redQ = new();
     Queue<Player> blueQ = new();
 
@@ -49,11 +48,11 @@ public class GameManager : Singleton<GameManager>
         playersArray[0].GetComponent<Player>().current = true;
         redTeam.ForEach(el => redQ.Enqueue(el));
         blueTeam.Skip(1).ToList().ForEach(el => blueQ.Enqueue(el));
-        originalRoster = PlayersComponents;
         timeLeftText = GameObject.Find("timeLeftText").GetComponent<Text>();
         currentTime = turnTime;
-        PathFinder.Initialize();
-        PathFinder.FindPathsToEnemies(CurrentPlayer, PlayersComponents);
+        //PathFinder.Initialize();
+        //PathFinder.FindPathsToEnemies(CurrentPlayer, PlayersComponents);
+        //enemiesInSight = RaycastDetector.DetectEnemiesInSight(CurrentPlayer, PlayersComponents);
     }
 
     private void Update()
@@ -66,7 +65,6 @@ public class GameManager : Singleton<GameManager>
             if (currentTime <= 0 || !BothTeamsActive)
             {
                 NextTurnProcedure();
-                PathFinder.FindPathsToEnemies(CurrentPlayer, PlayersComponents);
             }
             else
             {
@@ -141,10 +139,18 @@ public class GameManager : Singleton<GameManager>
 
             prevPlayer.current = false;
             nextPlayer.current = true;
+            
+            //PathFinder.FindPathsToEnemies(CurrentPlayer, PlayersComponents);
+            //enemiesInSight = RaycastDetector.DetectEnemiesInSight(CurrentPlayer, PlayersComponents);
+            //if (enemiesInSight.Count > 0)
+            //{
+            //    var target = enemiesInSight[0].transform.position;
+            //    CurrentPlayer.GetComponent<WeaponSwitcher>().SwitchWeaponTo(0);
+            //    CurrentPlayer.GetComponent<Player>().TryShoot(target);
+            //}
         }
         else
         {
-            // została jedna drużyna - szukamy zwycijodfjsd
             Debug.Log("END");
 
             var score = blueTeam.Count() - redTeam.Count();

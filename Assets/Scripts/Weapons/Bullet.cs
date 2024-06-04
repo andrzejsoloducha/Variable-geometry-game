@@ -18,19 +18,27 @@ public class Bullet : MonoBehaviour
         startingPoint = gameObject.transform.position;
         GameManager.Instance.weaponUsed = true;
 
-        if (Camera.main)
-        {
-            Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Vector2 position = transform.position;
-            direction = (mousePosition - position).normalized;
-        }
-        
+        var direction = GetDirection();
         var rb = GetComponent<Rigidbody2D>();
         if (rb != null)
         {
             rb.velocity = direction * speed;
         }
         Destroy(gameObject, 4f);
+    }
+
+    public Vector2 GetDirection(Vector3 targetPoint = default)
+    {
+        if (targetPoint == default)
+        {
+            if (Camera.main)
+            {
+                Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Vector2 position = transform.position;
+                return (mousePosition - position).normalized;
+            }
+        }
+        return (targetPoint - transform.position).normalized;
     }
 
     private void DestroyThisBullet()
@@ -66,7 +74,7 @@ public class Bullet : MonoBehaviour
             .Select(cp2d => cp2d.point)
             .Aggregate(new Vector2(), (acc, val) => new Vector2(acc.x + val.x, acc.y + val.y));
 
-        int nContacts = collision.contacts.Length;
+        var nContacts = collision.contacts.Length;
         var avgContactPoint = new Vector2(vectorSum.x / nContacts, vectorSum.y / nContacts);
         
         if (collisionObj.GetComponent<Tilemap>() || collisionObj.GetComponent<Player>())

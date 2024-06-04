@@ -4,6 +4,6 @@ namespace Interfaces
 {
     public interface IShootable
     {
-        void ShootBullet();
+        void ShootBullet(Vector3 targetPoint = default);
     }
 }

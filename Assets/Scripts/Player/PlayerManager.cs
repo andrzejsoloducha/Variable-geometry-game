@@ -50,7 +50,6 @@ public class PlayerManager : MonoBehaviour
                 var position = availablePlaces[index];
                 var playerObject = Instantiate(playerPrefab, position, Quaternion.identity);
                 var playerRigidbody2D = playerObject.AddComponent<Rigidbody2D>();
-                playerObject.AddComponent<BoxCollider2D>();
                 playerRigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
             
                 playerObject.tag = "Player";

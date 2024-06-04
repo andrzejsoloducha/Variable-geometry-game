@@ -1,6 +1,6 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Tilemaps;
+using Vector3 = System.Numerics.Vector3;
 
 public class WeaponDriller : MonoBehaviour
 {
@@ -35,18 +35,29 @@ public class WeaponDriller : MonoBehaviour
                 tilesDestroyed++;
             }
 
-            if (tilesDestroyed >= maxTilesDestroyed)
+            if (tilesDestroyed == maxTilesDestroyed)
             {
                 ResetDriller();
             }
         }
     }
 
-    private void ResetDriller()
+    public void ResetDriller()
     {
         tilesDestroyed = 0;
         ReducePlayerMoveSpeed(5);
         gameObject.SetActive(false);
-        GameManager.Instance.NextTurnProcedure();
+    }
+
+    public void FlipDriller(float direction)
+    {
+        if (direction > 0 && transform.localPosition.x < 0 ||
+            direction < 0 && transform.localPosition.x > 0)
+        {
+            transform.localPosition = new UnityEngine.Vector3(
+                -transform.localPosition.x, 
+                transform.localPosition.y,
+                transform.localPosition.z);
+        }
     }
 }

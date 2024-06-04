@@ -64,6 +64,11 @@ public class InputHandler : MonoBehaviour
         var currentWeapon = GetWeaponSwitcher().GetCurrentWeapon();
         var bazookaEquipped = currentWeapon?.name == "bazooka";
         var didNotUseWeaponThisRound = !WeaponUsed();
+
+        if (bazookaEquipped)
+        {
+            currentWeapon.GetComponent<Bazooka>().RotateBazookaToMouseInput(Input.mousePosition);
+        }
         
         if (Input.GetButtonDown("Fire1") && didNotUseWeaponThisRound && bazookaEquipped)
         {
@@ -76,6 +81,23 @@ public class InputHandler : MonoBehaviour
             currentWeapon?
                 .GetComponent<WeaponConstructor>()
                 .OnMouseInput();
+        }
+
+        if (currentWeapon && currentWeapon.name == "driller")
+        {
+            var lastDirection = Vector3.zero;
+            var direction = Input.GetAxisRaw("Horizontal");
+            if (direction != 0)
+            {
+                lastDirection = new Vector3(direction, 0, 0).normalized;
+            }
+
+            currentWeapon.GetComponent<WeaponDriller>().FlipDriller(lastDirection.x);
+            
+            if (GameManager.Instance.currentTime <= 0.1f)
+            {
+                currentWeapon.GetComponent<WeaponDriller>().ResetDriller();
+            }
         }
     }
 }

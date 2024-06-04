@@ -103,24 +103,35 @@ namespace Tools
             }
         }
 
-        private static List<int> GetPath(int start, int end)
+        private static (int steps, float totalWeight) GetPath(int start, int end)
         {
             if (_nextNodes[start, end] == -1)
-                return null;
+                return (0, 0);
 
             var path = new List<int>();
+            var totalWeight = 0f;
             var current = start;
 
             while (current != end)
             {
                 path.Add(current);
-                current = _nextNodes[current, end];
+                var nextTile = _nextNodes[current, end];
+                totalWeight += GetTileWeightFromIndex(nextTile);
+                current = nextTile;
             }
 
             path.Add(end);
-            return path;
+            totalWeight += GetTileWeightFromIndex(end);
+            return (path.Count, totalWeight);
         }
-        
+
+        private static float GetTileWeightFromIndex(int nextTile)
+        {
+            var x = nextTile % MapWidth;
+            var y = nextTile / MapWidth;
+            return GetTileWeight(x, y);
+        }
+
         public static void FindPathsToEnemies(GameObject currentPlayer, List<Player> players)
         {
             InitializeDistances();
@@ -135,10 +146,11 @@ namespace Tools
                     var enemyPos = enemy.gameObject.transform.position;
                     var end = GetTileIndex((int)enemyPos.x, (int)enemyPos.y);
 
-                    var path = GetPath(start, end);
-                    if (path != null)
+                    var (path, totalWeight) = GetPath(start, end);
+                    if (path != 0)
                     {
-                        Debug.Log($"Path from player to enemy at ({enemyPos.x}, {enemyPos.y}): {string.Join(" -> ", path)}");
+                        Debug.Log($"Path from player to enemy at ({enemyPos.x}, {enemyPos.y}): " +
+                                  " -> total steps: " + path + ", with weight: " + totalWeight);
                     }
                     else
                     {
