@@ -67,7 +67,7 @@ public class InputHandler : MonoBehaviour
 
         if (bazookaEquipped)
         {
-            currentWeapon.GetComponent<Bazooka>().RotateBazookaToMouseInput(Input.mousePosition);
+            //currentWeapon.GetComponent<Bazooka>().RotateBazookaToPoint(Input.mousePosition);
         }
         
         if (Input.GetButtonDown("Fire1") && didNotUseWeaponThisRound && bazookaEquipped)

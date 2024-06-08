@@ -20,7 +20,7 @@ public class Bullet : MonoBehaviour
 
         var direction = GetDirection();
         var rb = GetComponent<Rigidbody2D>();
-        if (rb != null)
+        if (rb)
         {
             rb.velocity = direction * speed;
         }
@@ -33,9 +33,7 @@ public class Bullet : MonoBehaviour
         {
             if (Camera.main)
             {
-                Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                Vector2 position = transform.position;
-                return (mousePosition - position).normalized;
+                targetPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             }
         }
         return (targetPoint - transform.position).normalized;

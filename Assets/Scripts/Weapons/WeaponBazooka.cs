@@ -12,10 +12,10 @@ public class Bazooka : MonoBehaviour, IShootable
         bullet.GetComponent<Bullet>().GetDirection(targetPoint);
     }
 
-    public void RotateBazookaToMouseInput(Vector3 mousePosition)
+    public void RotateBazookaToPoint(Vector3 worldPoint)
     {
-        var mousePos = Camera.main.ScreenToWorldPoint(mousePosition);
-        var direction = mousePos - transform.position;
+        var position = Camera.main.ScreenToWorldPoint(worldPoint);
+        var direction = position - transform.position;
         var angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
     }

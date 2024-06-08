@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 using Tools;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -17,6 +18,8 @@ public class GameManager : Singleton<GameManager>
 
     public int totalPlayers;
     private Team? winner;
+    private List<int> paths;
+    private List<GameObject> enemiesWithPath;
     private List<GameObject> enemiesInSight;
     public List<GameObject> Players => SceneManager.GetActiveScene()
         .GetRootGameObjects()
@@ -31,32 +34,39 @@ public class GameManager : Singleton<GameManager>
         .Find(player => player.current)
         ?.gameObject;
 
-    public List<Player> redTeam => PlayersComponents
+    private List<Player> RedTeam => PlayersComponents
         .FindAll(player => player.team == Team.Red);
-    
-    public List<Player> blueTeam => PlayersComponents
+
+    private List<Player> BlueTeam => PlayersComponents
         .FindAll(player => player.team == Team.Blue);
 
     public bool weaponUsed;
 
-    Queue<Player> redQ = new();
-    Queue<Player> blueQ = new();
+    private Queue<Player> redQ = new();
+    private Queue<Player> blueQ = new();
 
     private void Start()
     {
         var playersArray = GameObject.FindGameObjectsWithTag("Player");
         playersArray[0].GetComponent<Player>().current = true;
-        redTeam.ForEach(el => redQ.Enqueue(el));
-        blueTeam.Skip(1).ToList().ForEach(el => blueQ.Enqueue(el));
+        RedTeam.ForEach(el => redQ.Enqueue(el));
+        BlueTeam.Skip(1).ToList().ForEach(el => blueQ.Enqueue(el));
         timeLeftText = GameObject.Find("timeLeftText").GetComponent<Text>();
         currentTime = turnTime;
-        //PathFinder.Initialize();
-        //PathFinder.FindPathsToEnemies(CurrentPlayer, PlayersComponents);
-        //enemiesInSight = RaycastDetector.DetectEnemiesInSight(CurrentPlayer, PlayersComponents);
+        PathFinder.Initialize();
+        (paths, enemiesWithPath) = PathFinder.FindPathsToEnemies(CurrentPlayer, PlayersComponents);
+        enemiesInSight = RaycastDetector.DetectEnemiesInSight(CurrentPlayer, PlayersComponents);
     }
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            if (enemiesInSight.Count > 0)
+            {
+                ShootClosestEnemy(enemiesInSight);
+            }
+        }
         if (winner == null)
         {
             currentTime -= 1 * Time.deltaTime;
@@ -81,6 +91,29 @@ public class GameManager : Singleton<GameManager>
                 Team.Red => Color.red,
                 _ => timeLeftText.color
             };
+        }
+    }
+
+    private void ShootClosestEnemy(List<GameObject> enemies)
+    {
+        while (true)
+        {
+            var minIndex = paths.IndexOf(paths.Min());
+            foreach (var target in from enemy in enemies 
+                     where enemy == enemiesWithPath[minIndex] 
+                     select enemy.gameObject.transform.position)
+            {
+                CurrentPlayer.GetComponent<WeaponSwitcher>().SwitchWeaponTo(0); 
+                CurrentPlayer.
+                    GetComponent<WeaponSwitcher>().
+                    GetCurrentWeapon()?.
+                    GetComponent<Bazooka>().
+                    RotateBazookaToPoint(target);
+                CurrentPlayer.GetComponent<Player>().TryShoot(target);
+                return;
+            }
+            paths.RemoveAt(minIndex);
+            enemiesWithPath.RemoveAt(minIndex);
         }
     }
 
@@ -140,20 +173,14 @@ public class GameManager : Singleton<GameManager>
             prevPlayer.current = false;
             nextPlayer.current = true;
             
-            //PathFinder.FindPathsToEnemies(CurrentPlayer, PlayersComponents);
-            //enemiesInSight = RaycastDetector.DetectEnemiesInSight(CurrentPlayer, PlayersComponents);
-            //if (enemiesInSight.Count > 0)
-            //{
-            //    var target = enemiesInSight[0].transform.position;
-            //    CurrentPlayer.GetComponent<WeaponSwitcher>().SwitchWeaponTo(0);
-            //    CurrentPlayer.GetComponent<Player>().TryShoot(target);
-            //}
+            (paths, enemiesWithPath) = PathFinder.FindPathsToEnemies(CurrentPlayer, PlayersComponents);
+            enemiesInSight = RaycastDetector.DetectEnemiesInSight(CurrentPlayer, PlayersComponents);
         }
         else
         {
             Debug.Log("END");
 
-            var score = blueTeam.Count() - redTeam.Count();
+            var score = BlueTeam.Count() - RedTeam.Count();
 
             winner = score switch
             {
@@ -166,5 +193,5 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    private bool BothTeamsActive => blueTeam.Count > 0 && redTeam.Count > 0;
+    private bool BothTeamsActive => BlueTeam.Count > 0 && RedTeam.Count > 0;
 }

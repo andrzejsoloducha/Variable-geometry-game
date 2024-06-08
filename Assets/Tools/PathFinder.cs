@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
@@ -132,12 +133,14 @@ namespace Tools
             return GetTileWeight(x, y);
         }
 
-        public static void FindPathsToEnemies(GameObject currentPlayer, List<Player> players)
+        public static (List<int>, List<GameObject>) FindPathsToEnemies(GameObject currentPlayer, List<Player> players)
         {
             InitializeDistances();
             RunFloydWarshall();
             var playerPos = currentPlayer.transform.position;
             var start = GetTileIndex((int)playerPos.x, (int)playerPos.y);
+            var paths = new List<int>();
+            var enemies = new List<GameObject>();
 
             foreach (var enemy in players)
             {
@@ -149,15 +152,13 @@ namespace Tools
                     var (path, totalWeight) = GetPath(start, end);
                     if (path != 0)
                     {
-                        Debug.Log($"Path from player to enemy at ({enemyPos.x}, {enemyPos.y}): " +
-                                  " -> total steps: " + path + ", with weight: " + totalWeight);
-                    }
-                    else
-                    {
-                        Debug.Log($"No path found from player to enemy at ({enemyPos.x}, {enemyPos.y})");
+                        paths.Add(path);
+                        enemies.Add(enemy.gameObject);
                     }
                 }
             }
+
+            return (paths, enemies);
         }
     }
 }
