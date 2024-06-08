@@ -685,7 +685,8 @@ MonoBehaviour:
   mapWidth: 30
   mapHeight: 20
   timeLeftText: {fileID: 802994935}
-  totalPlayers: 4
+  totalPlayers: 2
+  currentTarget: {x: 0, y: 0, z: 0}
   weaponUsed: 0
 --- !u!4 &2004031351
 Transform:

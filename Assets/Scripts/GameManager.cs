@@ -21,6 +21,7 @@ public class GameManager : Singleton<GameManager>
     private List<int> paths;
     private List<GameObject> enemiesWithPath;
     private List<GameObject> enemiesInSight;
+    public Vector3 currentTarget;
     public List<GameObject> Players => SceneManager.GetActiveScene()
         .GetRootGameObjects()
         .ToList()
@@ -99,18 +100,16 @@ public class GameManager : Singleton<GameManager>
         while (true)
         {
             var minIndex = paths.IndexOf(paths.Min());
-            foreach (var target in from enemy in enemies 
-                     where enemy == enemiesWithPath[minIndex] 
-                     select enemy.gameObject.transform.position)
+            foreach (var enemy in enemies)
             {
-                CurrentPlayer.GetComponent<WeaponSwitcher>().SwitchWeaponTo(0); 
-                CurrentPlayer.
-                    GetComponent<WeaponSwitcher>().
-                    GetCurrentWeapon()?.
-                    GetComponent<Bazooka>().
-                    RotateBazookaToPoint(target);
-                CurrentPlayer.GetComponent<Player>().TryShoot(target);
-                return;
+                if (enemy == enemiesWithPath[minIndex])
+                {
+                    currentTarget = enemiesWithPath[minIndex].transform.position;
+                    CurrentPlayer.GetComponent<WeaponSwitcher>().SwitchWeaponTo(0); 
+                    CurrentPlayer.GetComponent<WeaponSwitcher>().GetCurrentWeapon()?.GetComponent<Bazooka>().RotateBazookaToPoint(currentTarget);
+                    CurrentPlayer.GetComponent<Player>().TryShoot(currentTarget);
+                    return;
+                } 
             }
             paths.RemoveAt(minIndex);
             enemiesWithPath.RemoveAt(minIndex);

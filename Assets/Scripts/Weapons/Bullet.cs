@@ -17,17 +17,10 @@ public class Bullet : MonoBehaviour
     {
         startingPoint = gameObject.transform.position;
         GameManager.Instance.weaponUsed = true;
-
-        var direction = GetDirection();
-        var rb = GetComponent<Rigidbody2D>();
-        if (rb)
-        {
-            rb.velocity = direction * speed;
-        }
         Destroy(gameObject, 4f);
     }
 
-    public Vector2 GetDirection(Vector3 targetPoint = default)
+    public void GetDirection(Vector3 targetPoint = default)
     {
         if (targetPoint == default)
         {
@@ -36,7 +29,12 @@ public class Bullet : MonoBehaviour
                 targetPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             }
         }
-        return (targetPoint - transform.position).normalized;
+        var directionNormalized = (targetPoint - transform.position).normalized;
+        var rb = GetComponent<Rigidbody2D>();
+        if (rb)
+        {
+            rb.velocity = directionNormalized * speed;
+        }
     }
 
     private void DestroyThisBullet()
