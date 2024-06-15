@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Tools;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
@@ -11,7 +12,6 @@ public class Bullet : MonoBehaviour
     public float explosionRadius;
     private Vector2 direction;
     private Vector3 startingPoint;
-    private bool isDestroyed;
     
     private void Start()
     {
@@ -93,8 +93,9 @@ public class Bullet : MonoBehaviour
                 }
             }
 
+            var explRadiusForPlayers = 0.95f * Mathf.Sqrt(2);
             GameManager.Instance.Players
-                .FindAll(DistanceFromPointLessOrEqual(avgContactPoint, explosionRadius))
+                .FindAll(DistanceFromPointLessOrEqual(avgContactPoint, explRadiusForPlayers))
                 .ForEach(HandleBulletDamage);
         }
     }
@@ -102,7 +103,7 @@ public class Bullet : MonoBehaviour
     private void HandleBulletDamage(GameObject go)
     {
         var player = go.GetComponent<Player>();
-        var damage = CalculateDamage(minDamage: 30, maxDamage: 65, maxDistance: 12);
+        var damage = DmgCalculator.CalculateBulletDamage(startingPoint, transform.position);
         player.TakeDamage(damage);
     }
 
@@ -120,22 +121,5 @@ public class Bullet : MonoBehaviour
             return dist <= maxDist;
         };
     }
-
-    private int CalculateDamage(float minDamage, float maxDamage, float maxDistance)
-    {
-        var distance = Vector3.Distance(startingPoint, gameObject.transform.position);
-        if (distance <= 1)
-        {
-            return (int)maxDamage;
-        }
-
-        if (distance >= maxDistance)
-        {
-            return (int)minDamage;
-        }
-
-        var damageRange = maxDamage - minDamage;
-        var slope = -damageRange / maxDistance;
-        return (int)(maxDamage + slope * distance);
-    }
+    
 }

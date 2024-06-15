@@ -1,5 +1,6 @@
 ﻿using Interfaces;
 using UnityEngine;
+using Input = UnityEngine.Windows.Input;
 
 public class Bazooka : MonoBehaviour, IShootable
 {
@@ -14,6 +15,7 @@ public class Bazooka : MonoBehaviour, IShootable
 
     public void RotateBazookaToPoint(Vector3 worldPoint)
     {
+        worldPoint = Camera.main.ScreenToWorldPoint(worldPoint);
         var direction = worldPoint - gameObject.transform.
             GetChild(0).gameObject.transform.position;
         var angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;

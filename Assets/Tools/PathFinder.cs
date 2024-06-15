@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
@@ -14,6 +13,8 @@ namespace Tools
         private static int _numVertices;
         private static float[,] _dist;
         private static int[,] _nextNodes;
+        private const float TerrainMultiplier = 5.0f;
+
         private static Tilemap Tilemap => SceneManager.GetActiveScene()
             .GetRootGameObjects()
             .ToList()
@@ -49,10 +50,10 @@ namespace Tools
                 {
                     var i = GetTileIndex(x, y);
 
-                    CheckAndSetDistance(i, x + 1, y); // Right
-                    CheckAndSetDistance(i, x - 1, y); // Left
-                    CheckAndSetDistance(i, x, y + 1); // Up
-                    CheckAndSetDistance(i, x, y - 1); // Down
+                    CheckAndSetDistance(i, x + 1, y); // prawo
+                    CheckAndSetDistance(i, x - 1, y); // lewo
+                    CheckAndSetDistance(i, x, y + 1); // gura
+                    CheckAndSetDistance(i, x, y - 1); // duł
                 }
             }
         }
@@ -83,7 +84,7 @@ namespace Tools
         {
             var cellPosition = Tilemap.WorldToCell(
                 new Vector3(x, y, 0));
-            return Tilemap.GetTile(cellPosition) ? 2.0f : 1.0f;
+            return Tilemap.GetTile(cellPosition) ? TerrainMultiplier : 1.0f;
         }
 
         private static void RunFloydWarshall()
@@ -159,6 +160,31 @@ namespace Tools
             }
 
             return (paths, enemies);
+        }
+        
+        public static int TotalPathToEnemies(Vector3Int point)
+        {
+            InitializeDistances();
+            RunFloydWarshall();
+            var start = GetTileIndex(point.x, point.y);
+            var paths = new List<int>();
+            var currentTeam = GameManager.Instance.CurrentPlayer.GetComponent<Player>().team;
+            var enemies = GameManager.Instance.Players.FindAll(
+                go => go.GetComponent<Player>().team != currentTeam);
+
+            foreach (var enemy in enemies)
+            {
+                var enemyPos = enemy.gameObject.transform.position;
+                var end = GetTileIndex((int)enemyPos.x, (int)enemyPos.y);
+
+                var (path, totalWeight) = GetPath(start, end);
+                if (path != 0)
+                {
+                    paths.Add(path);
+                }
+            }
+
+            return paths.Sum();
         }
     }
 }
