@@ -14,15 +14,16 @@ namespace Tools
             var currentTeam = GameManager.Instance.CurrentPlayer.GetComponent<Player>().team;
             var enemies = GameManager.Instance.Players.FindAll(
                 go => go.GetComponent<Player>().team != currentTeam);
-            var pointInRay = new Vector2(point.x, point.y);
-            return (from enemy in enemies 
-                let direction = enemy.gameObject.transform.position - point 
-                let hit = Physics2D.Raycast(
-                    pointInRay, 
-                    direction,
-                    Distance,
-                    1 << LayerMask.NameToLayer("Ground")) 
-                where !hit.collider select enemy.gameObject).ToList();
+            var pointInRay = new Vector3(point.x, point.y, 0);
+            var list = new List<GameObject>();
+            foreach (var enemy in enemies)
+            {
+                var direction = enemy.gameObject.transform.position - point;
+                var hit = Physics2D.Raycast(pointInRay, direction, Distance, 1 << LayerMask.NameToLayer("Ground"));
+                if (!hit.collider) list.Add(enemy.gameObject);
+            }
+
+            return list;
         }
     }
 }

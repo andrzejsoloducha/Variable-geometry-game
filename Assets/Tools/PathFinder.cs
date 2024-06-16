@@ -42,7 +42,7 @@ namespace Tools
             }
         }
 
-        private static void InitializeDistances()
+        public static void InitializeDistances()
         {
             for (var x = 0; x < MapWidth; x++)
             {
@@ -85,6 +85,13 @@ namespace Tools
             var cellPosition = Tilemap.WorldToCell(
                 new Vector3(x, y, 0));
             return Tilemap.GetTile(cellPosition) ? TerrainMultiplier : 1.0f;
+        }
+
+        public static void CalculatePathsNewRound()
+        {
+            Initialize();
+            InitializeDistances();
+            RunFloydWarshall();
         }
 
         private static void RunFloydWarshall()
@@ -136,8 +143,6 @@ namespace Tools
 
         public static (List<int>, List<GameObject>) FindPathsToEnemies(GameObject currentPlayer, List<Player> players)
         {
-            InitializeDistances();
-            RunFloydWarshall();
             var playerPos = currentPlayer.transform.position;
             var start = GetTileIndex((int)playerPos.x, (int)playerPos.y);
             var paths = new List<int>();
@@ -164,8 +169,6 @@ namespace Tools
         
         public static int TotalPathToEnemies(Vector3Int point)
         {
-            InitializeDistances();
-            RunFloydWarshall();
             var start = GetTileIndex(point.x, point.y);
             var paths = new List<int>();
             var currentTeam = GameManager.Instance.CurrentPlayer.GetComponent<Player>().team;

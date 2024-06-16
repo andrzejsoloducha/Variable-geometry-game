@@ -51,8 +51,8 @@ public class GameManager : Singleton<GameManager>
         BlueTeam.Skip(1).ToList().ForEach(el => blueQ.Enqueue(el));
         timeLeftText = GameObject.Find("timeLeftText").GetComponent<Text>();
         currentTime = turnTime;
-        PathFinder.Initialize();
-        OptAlgorithm();
+        //PathFinder.CalculatePathsNewRound();
+        //OptAlgorithm();
         //(_, _) = PathFinder.FindPathsToEnemies(CurrentPlayer, PlayersComponents);
         //RaycastDetector.DetectEnemiesInSight(CurrentPlayer.transform.position);
     }
@@ -170,22 +170,25 @@ public class GameManager : Singleton<GameManager>
         
         if (CurrentPlayer.GetComponent<Player>().team == Team.Red)
         {
+            PathFinder.CalculatePathsNewRound();
             OptAlgorithm();
         }
         else
         {
-            MlAlgorithm();
+            PathFinder.CalculatePathsNewRound();
+            OptAlgorithm();
         }
     }
 
     private void MlAlgorithm()
     {
-        // to do
+        // todo
     }
 
     private void OptAlgorithm()
     { 
         var damagable = FindDamageableEnemies();
+        Debug.Log("damagable count: " + damagable.Count);
         var (killable, 
             shootable) = FindKillableAndShootableEnemies(damagable);
 
