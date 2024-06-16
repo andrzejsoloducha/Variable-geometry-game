@@ -295,11 +295,12 @@ public class GameManager : Singleton<GameManager>
         var positions = FindValidPositions(position, movementRangeAfterShooting);
         var l = 0;
         var r = positions.Count;
-        (int, Vector3Int) ret = (0, default);
+        var m = 0;
+        var mPaths = 0;
         while (l <= r)
         {
-            var m = l + (r - 1) / 2;
-            var mPaths = PathFinder.TotalPathToEnemies(positions[m]);
+            m = l + (r - 1) / 2;
+            mPaths = PathFinder.TotalPathToEnemies(positions[m]);
             var m1Paths = PathFinder.TotalPathToEnemies(positions[m - 1]);
             var m2Paths = PathFinder.TotalPathToEnemies(positions[m + 1]);
             if (m > 0 && mPaths < m1Paths)
@@ -312,11 +313,10 @@ public class GameManager : Singleton<GameManager>
             }
             else
             {
-                ret = (mPaths, positions[m]);
                 break;
             }
         }
-        return ret;
+        return (mPaths, positions[m]);
     }
 
     private List<Vector3Int> FindValidPositions(Vector3 playerPosition, int movementRange)
