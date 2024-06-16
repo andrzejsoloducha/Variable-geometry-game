@@ -205,27 +205,26 @@ public class GameManager : Singleton<GameManager>
 
     }
 
-    private static (Dictionary<Vector3, GameObject> killable, Dictionary<Vector3, GameObject> shootable) FindKillableAndShootableEnemies(Dictionary<Vector3, List<GameObject>> damagable)
+    private static (List<(Vector3, GameObject)> killable, List<(Vector3, GameObject)> shootable) FindKillableAndShootableEnemies(Dictionary<Vector3, List<GameObject>> damagable)
     {
-        var killable = new Dictionary<Vector3, GameObject>();
-        var shootable = new Dictionary<Vector3, GameObject>();
-        foreach (var kvp in damagable)
-        {
-            foreach (var go in kvp.Value)
+        var killable = new List<(Vector3, GameObject)>();
+        var shootable = new List<(Vector3, GameObject)>();
+
+        List<(Vector3, GameObject)> flattenedList = damagable.SelectMany(kvp => kvp.Value.Select(go
+            => (kvp.Key, go))).ToList();
+        foreach (var tuple in flattenedList)
+        { 
+            var enemyHealth = tuple.Item2.GetComponent<Player>().Health;
+            var potentialDamage = DmgCalculator.CalculateBulletDamage(tuple.Item1, tuple.Item2.transform.position);
+            if (potentialDamage >= enemyHealth)
             {
-                var enemyHealth = go.GetComponent<Player>().Health;
-                var potentialDamage = DmgCalculator.CalculateBulletDamage(kvp.Key, go.transform.position);
-                if (potentialDamage >= enemyHealth)
-                {
-                    killable.Add(kvp.Key, go);
-                }
-                else
-                {
-                    shootable.Add(kvp.Key, go);
-                }
+                killable.Add((tuple.Item1, tuple.Item2));
+            }
+            else
+            {
+                shootable.Add((tuple.Item1, tuple.Item2));
             }
         }
-
         return (killable, shootable);
     }
 
@@ -242,48 +241,48 @@ public class GameManager : Singleton<GameManager>
         return damagable;
     }
 
-    private void ShootTheClosestEnemy(Dictionary<Vector3, GameObject> shootable)
+    private void ShootTheClosestEnemy(List<(Vector3, GameObject)> shootable)
     {
         var currPlayerPos = CurrentPlayer.transform.position;
         float shortestDistance = mapWidth * mapHeight;
         var bestTarget = shootable.ElementAt(0);
         
-        foreach (var kvp in shootable)
+        foreach (var tuple in shootable)
         {
-            var distToEnemy = Vector3.Distance(currPlayerPos, kvp.Value.transform.position);
+            var distToEnemy = Vector3.Distance(currPlayerPos, tuple.Item2.transform.position);
             if (distToEnemy < shortestDistance)
             {
-                bestTarget = kvp;
+                bestTarget = tuple;
                 shortestDistance = distToEnemy;
             }
         }
-        bestTarget.Value.SetActive(false);
-        var (_, pointToRun) = FindTheFarthestPositionToEscape(bestTarget.Value.transform.position);
-        bestTarget.Value.SetActive(true);
-        ShootTarget(bestTarget.Value);
+        bestTarget.Item2.SetActive(false);
+        var (_, pointToRun) = FindTheFarthestPositionToEscape(bestTarget.Item2.transform.position);
+        bestTarget.Item2.SetActive(true);
+        ShootTarget(bestTarget.Item2);
         CurrentPlayer.transform.position = pointToRun;
     }
 
-    private void FindTheBestTargetAndKill(Dictionary<Vector3, GameObject> killable)
+    private void FindTheBestTargetAndKill(List<(Vector3, GameObject)> killable)
     {
         var farthestPathSum = 0;
         var bestTarget = killable.ElementAt(0);
         Vector3 pointToRun = default;
-        foreach (var kvp in killable)
+        foreach (var tuple in killable)
         {
             int currFarthestPathSum;
-            kvp.Value.SetActive(false);
-            (currFarthestPathSum, pointToRun) = FindTheFarthestPositionToEscape(kvp.Value.transform.position);
-            kvp.Value.SetActive(true);
+            tuple.Item2.SetActive(false);
+            (currFarthestPathSum, pointToRun) = FindTheFarthestPositionToEscape(tuple.Item2.transform.position);
+            tuple.Item2.SetActive(true);
             if (currFarthestPathSum > farthestPathSum && killable.Count > 1)
             {
                 farthestPathSum = currFarthestPathSum;
-                bestTarget = kvp;
+                bestTarget = (tuple.Item1, tuple.Item2);
             }
         }
 
-        CurrentPlayer.transform.position = bestTarget.Key; // run to the shooting position
-        ShootTarget(bestTarget.Value);
+        CurrentPlayer.transform.position = bestTarget.Item1; // run to the shooting position
+        ShootTarget(bestTarget.Item2);
         CurrentPlayer.transform.position = pointToRun;
     }
 
