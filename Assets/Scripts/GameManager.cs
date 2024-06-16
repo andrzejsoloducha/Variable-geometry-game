@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
@@ -19,10 +18,7 @@ public class GameManager : Singleton<GameManager>
 
     public int totalPlayers;
     private Team? winner;
-    private List<int> paths;
-    private List<GameObject> enemiesWithPath;
-    private List<GameObject> enemiesInSight;
-    public Vector3 currentTarget;
+
     public List<GameObject> Players => SceneManager.GetActiveScene()
         .GetRootGameObjects()
         .ToList()
@@ -56,8 +52,9 @@ public class GameManager : Singleton<GameManager>
         timeLeftText = GameObject.Find("timeLeftText").GetComponent<Text>();
         currentTime = turnTime;
         PathFinder.Initialize();
-        (paths, enemiesWithPath) = PathFinder.FindPathsToEnemies(CurrentPlayer, PlayersComponents);
-        enemiesInSight = RaycastDetector.DetectEnemiesInSight(CurrentPlayer.transform.position);
+        OptAlgorithm();
+        //(_, _) = PathFinder.FindPathsToEnemies(CurrentPlayer, PlayersComponents);
+        //RaycastDetector.DetectEnemiesInSight(CurrentPlayer.transform.position);
     }
 
     private void Update()
@@ -88,30 +85,7 @@ public class GameManager : Singleton<GameManager>
             };
         }
     }
-
-    private void ShootClosestEnemy(List<GameObject> enemies)
-    {
-        while (true)
-        {
-            var minIndex = paths.IndexOf(paths.Min());
-            foreach (var enemy in enemies)
-            {
-                if (enemy == enemiesWithPath[minIndex])
-                {
-                    currentTarget = enemiesWithPath[minIndex].transform.position;
-                    CurrentPlayer.GetComponent<WeaponSwitcher>().SwitchWeaponTo(0); 
-                    CurrentPlayer.GetComponent<WeaponSwitcher>()
-                        .GetCurrentWeapon()?
-                        .GetComponent<Bazooka>()
-                        .RotateBazookaToPoint(currentTarget);
-                    CurrentPlayer.GetComponent<Player>().TryShoot(currentTarget);
-                    return;
-                } 
-            }
-            paths.RemoveAt(minIndex);
-            enemiesWithPath.RemoveAt(minIndex);
-        }
-    }
+    
 
     private void ShootTarget(GameObject targetObject)
     {
@@ -155,9 +129,7 @@ public class GameManager : Singleton<GameManager>
         if (BothTeamsActive)
         {
             var prevPlayer = kamikaze ? kamikaze : CurrentPlayer.GetComponent<Player>();
-            
             currentTime = turnTime;
-
             Player nextPlayer;
 
             if (prevPlayer.team == Team.Blue)
@@ -228,6 +200,7 @@ public class GameManager : Singleton<GameManager>
         else
         {
             // don't move, build the closest one
+            Debug.Log("Did not found any enemies near, you can become Bob The Builder!");
         }
 
     }
@@ -316,12 +289,13 @@ public class GameManager : Singleton<GameManager>
 
     private bool BothTeamsActive => BlueTeam.Count > 0 && RedTeam.Count > 0;
 
-    private (int, Vector3) FindTheFarthestPositionToEscape(Vector3 position)
+    private (int mPaths, Vector3Int) FindTheFarthestPositionToEscape(Vector3 position)
     {
         const int movementRangeAfterShooting = 4;
         var positions = FindValidPositions(position, movementRangeAfterShooting);
         var l = 0;
         var r = positions.Count;
+        (int, Vector3Int) ret = (0, default);
         while (l <= r)
         {
             var m = l + (r - 1) / 2;
@@ -338,16 +312,12 @@ public class GameManager : Singleton<GameManager>
             }
             else
             {
-                return (mPaths, positions[m]);
+                ret = (mPaths, positions[m]);
+                break;
             }
         }
+        return ret;
     }
-
-    private object TotalPathToEnemies(Vector3Int position)
-    {
-        throw new NotImplementedException();
-    }
-
 
     private List<Vector3Int> FindValidPositions(Vector3 playerPosition, int movementRange)
     {
