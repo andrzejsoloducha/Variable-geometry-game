@@ -9,7 +9,7 @@ namespace Tools
         private static readonly float Distance =
             Mathf.Sqrt((GameManager.Instance.mapWidth ^ 2 + GameManager.Instance.mapHeight ^ 2));
         
-        public static List<GameObject> DetectEnemiesInSight(Vector3 point)
+        public static List<GameObject> DetectEnemiesInSight(Vector3Int point)
         {
             var currentTeam = GameManager.Instance.CurrentPlayer.GetComponent<Player>().team;
             var enemies = GameManager.Instance.Players.FindAll(
@@ -19,7 +19,8 @@ namespace Tools
             foreach (var enemy in enemies)
             {
                 var direction = enemy.gameObject.transform.position - point;
-                var hit = Physics2D.Raycast(pointInRay, direction, Distance, 1 << LayerMask.NameToLayer("Ground"));
+                var distance = Vector3.Distance(enemy.gameObject.transform.position, point);
+                var hit = Physics2D.Raycast(pointInRay, direction, distance, 1 << LayerMask.NameToLayer("Ground"));
                 if (!hit.collider) list.Add(enemy.gameObject);
             }
 

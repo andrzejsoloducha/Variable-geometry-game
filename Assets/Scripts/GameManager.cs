@@ -61,8 +61,7 @@ public class GameManager : Singleton<GameManager>
     {
         if (winner == null)
         {
-            currentTime -= 1 * Time.deltaTime;
-            timeLeftText.text = currentTime.ToString("0.0");
+            TickTimer();
 
             if (currentTime <= 0 || !BothTeamsActive)
             {
@@ -75,17 +74,28 @@ public class GameManager : Singleton<GameManager>
         }
         else
         {
-            timeLeftText.text = "WINNER: " + winner;
-            timeLeftText.horizontalOverflow = HorizontalWrapMode.Overflow;
-            timeLeftText.color = winner switch
-            {
-                Team.Blue => Color.blue,
-                Team.Red => Color.red,
-                _ => timeLeftText.color
-            };
+            AnnounceWinner();
         }
     }
-    
+
+    private void AnnounceWinner()
+    {
+        timeLeftText.text = "WINNER: " + winner;
+        timeLeftText.horizontalOverflow = HorizontalWrapMode.Overflow;
+        timeLeftText.color = winner switch
+        {
+            Team.Blue => Color.blue,
+            Team.Red => Color.red,
+            _ => timeLeftText.color
+        };
+    }
+
+    private void TickTimer()
+    {
+        currentTime -= 1 * Time.deltaTime;
+        timeLeftText.text = currentTime.ToString("0.0");
+    }
+
 
     private void ShootTarget(GameObject targetObject)
     {
@@ -188,22 +198,23 @@ public class GameManager : Singleton<GameManager>
     private void OptAlgorithm()
     { 
         var damagable = FindDamageableEnemies();
-        Debug.Log("damagable count: " + damagable.Count);
         var (killable, 
             shootable) = FindKillableAndShootableEnemies(damagable);
 
         if (killable.Count > 0)
         {
+            Debug.Log(CurrentPlayer.name + "Found killable enemy, shooting! ");
             FindTheBestTargetAndKill(killable);
         }
         else if (killable.Count == 0 && shootable.Count > 0)
         {
+            Debug.Log(CurrentPlayer.name + "Found the closest enemy, shooting! ");
             ShootTheClosestEnemy(shootable);
         }
         else
         {
             // don't move, build the closest one
-            Debug.Log("Did not found any enemies near, you can become Bob The Builder!");
+            Debug.Log(CurrentPlayer.name + "you become Bob The Builder!");
         }
 
     }
@@ -259,9 +270,7 @@ public class GameManager : Singleton<GameManager>
                 shortestDistance = distToEnemy;
             }
         }
-        bestTarget.Item2.SetActive(false);
         var (_, pointToRun) = FindTheFarthestPositionToEscape(bestTarget.Item2.transform.position);
-        bestTarget.Item2.SetActive(true);
         ShootTarget(bestTarget.Item2);
         CurrentPlayer.transform.position = pointToRun;
     }
@@ -297,6 +306,7 @@ public class GameManager : Singleton<GameManager>
         var positions = FindValidPositions(position, movementRangeAfterShooting);
         var l = 0;
         var r = positions.Count;
+        Debug.Log("found valid positions: " + r);
         var m = 0;
         var mPaths = 0;
         while (l <= r)
@@ -337,13 +347,11 @@ public class GameManager : Singleton<GameManager>
             {
                 var currentCell = new Vector3Int(x, y, 0);
                 var cellBelow = new Vector3Int(x, y - 1, 0);
-                if (Vector3.Distance(centerCell, currentCell) <= movementRange)
+                if (tilemap.GetTile(cellBelow))
                 {
-                    if (tilemap.HasTile(cellBelow))
-                    {
-                        validPoints.Add(currentCell);
-                    }
+                    validPoints.Add(currentCell);
                 }
+
             }
         }
         return validPoints;
