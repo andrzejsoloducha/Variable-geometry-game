@@ -97,7 +97,7 @@ public class GameManager : Singleton<GameManager>
     }
 
 
-    private void ShootTarget(GameObject targetObject)
+    public void ShootTarget(GameObject targetObject)
     {
         var targetPosition = targetObject.transform.position;
         CurrentPlayer.GetComponent<WeaponSwitcher>().SwitchWeaponTo(0); 
