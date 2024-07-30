@@ -18,10 +18,21 @@ public class QLearningAgent : Agent
     private float minEpsilon = 0.1f;
     private float epsilonDecay = 0.995f;
     private GameObject currentPlayer;
+    private GenerateMap generateMap;
+    private PlayerManager playerManager;
+
+
+    private void Start()
+    {
+        generateMap = FindObjectOfType<GenerateMap>();
+        playerManager = FindObjectOfType<PlayerManager>();
+    }
 
     public override void OnEpisodeBegin()
     {
-        SceneManager.LoadScene("SampleScene");
+        generateMap?.TriggerResetMap();
+        playerManager?.TriggerResetPlayers();
+        GameManager.Instance.StartFreshGame();
         currentPlayer = GameManager.Instance.CurrentPlayer;
         epsilon = Mathf.Max(minEpsilon, epsilon * epsilonDecay);
     }
@@ -29,18 +40,32 @@ public class QLearningAgent : Agent
     public override void CollectObservations(VectorSensor sensor)
     {
         sensor.AddObservation(currentPlayer.transform.position);
-
-        var raySensor = GetComponent<RayPerceptionSensorComponentBase>();
-        var rayObservations = raySensor.GetRayPerceptionInput();
-        foreach (var observation in rayObservations)
-        {
-            sensor.AddObservation(observation);
-        }
         var enemies = GameManager.Instance.Players.FindAll(
             go => go.GetComponent<Player>().team != currentPlayer.GetComponent<Player>().team);
         foreach (var enemy in enemies)
         {
             sensor.AddObservation(enemy.transform.position);
+        }
+        generateMap?.TriggerUpdateMap();
+        if (generateMap != null)
+        {
+            var environmentMap = generateMap.map;
+            var mapHeight = GameManager.Instance.mapHeight;
+            var mapWidth = GameManager.Instance.mapWidth;
+            var envMapFlattened = new float[mapHeight * mapWidth];
+            for (var i = 0; i < mapHeight; i++)
+            {
+                for (var j = 0; j < mapWidth; j++)
+                {
+                    envMapFlattened[i * mapWidth + j] = environmentMap[i, j];
+                }
+            }
+        
+            sensor.AddObservation(envMapFlattened);
+        }
+        else
+        {
+            Debug.LogWarning("generate map is null there, fix it!");
         }
     }
 
@@ -81,10 +106,9 @@ public class QLearningAgent : Agent
         return null;
     }
 
-    public override void OnActionReceived(ActionBuffers actions)
+    public override void OnActionReceived(ActionBuffers actionBuffers)
     {
         var selectedTarget = SelectTarget();
-
         if (!selectedTarget) // then choose target randomly
         {
             var currentTeam = GameManager.Instance.CurrentPlayer.GetComponent<Player>().team;

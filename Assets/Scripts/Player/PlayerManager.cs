@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Random = UnityEngine.Random;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -10,14 +12,29 @@ public class PlayerManager : MonoBehaviour
     public string playerLayerName = "Player";
     public List<GameObject> players = new();
     public Tilemap tilemap;
+    public event EventHandler OnResetPlayersCalled;
     
     private void Start()
     {
         FindPlacesToRespawn();
         Respawn();
     }
+    public void TriggerResetPlayers()
+    {
+        OnResetPlayersCalled?.Invoke(this, EventArgs.Empty);
+    }
 
-    public void ResetPlayers()
+    private void OnEnable()
+    {
+        OnResetPlayersCalled += ResetPlayers;
+    }
+
+    private void OnDisable()
+    {
+        OnResetPlayersCalled -= ResetPlayers;
+    }
+
+    private void ResetPlayers(object sender, EventArgs e)
     {
         var playersList = GameManager.Instance.Players;
         foreach (var player in playersList)

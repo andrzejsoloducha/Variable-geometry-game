@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Random = UnityEngine.Random;
 
 
 public class GenerateMap : MonoBehaviour
@@ -13,36 +15,67 @@ public class GenerateMap : MonoBehaviour
     private int width;
     private int height;
 
+    public int[,] map;
+    public event EventHandler OnResetMapCalled;
+    public event EventHandler OnUpdateMapCalled;
+
+    public void TriggerResetMap()
+    {
+        OnResetMapCalled?.Invoke(this, EventArgs.Empty);
+    }
+
+    public void TriggerUpdateMap()
+    {
+        OnUpdateMapCalled?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void OnEnable()
+    {
+        OnResetMapCalled += ResetMap;
+        OnUpdateMapCalled += UpdateMap;
+    }
+    
+
+    private void OnDisable()
+    {
+        OnResetMapCalled -= ResetMap;
+        OnUpdateMapCalled -= UpdateMap;
+    }
+
+    private void UpdateMap(object sender, EventArgs e)
+    {
+        for (var x = 0; x < tilemap.size.x; x++) {
+            for (var y = 0; y < tilemap.size.y; y++) {
+                var position = new Vector3Int(x, y, 0);
+                if (tilemap.GetTile(position) != null)
+                {
+                    map[x, y] = 1;
+                } 
+                else
+                {
+                    map[x, y] = 0;
+                }
+            }
+        }
+    }
 
     private void Start()
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         width = gameManager.mapWidth;
         height = gameManager.mapHeight;
-        ClearMap();
-        var seed = Time.time;
-
-        var map = GenerateArray(width, height, true);
-        map = PerlinNoiseCave(map, Random.Range(0.0001f, 0.4f), true);
-
-        RenderMap(map, tilemap, tile);
+        ResetMap(sender:null, e: null);
     }
 
-    public void ResetMap()
+    private void ResetMap(object sender, EventArgs e)
     {
         width = GameManager.Instance.mapWidth;
         height = GameManager.Instance.mapHeight;
-        ClearMap();
-        var map = GenerateArray(width, height, true);
+        tilemap.ClearAllTiles();
+        map = GenerateArray(width, height, true);
         map = PerlinNoiseCave(map, Random.Range(0.0001f, 0.4f), true);
 
         RenderMap(map, tilemap, tile);
-    }
-
-
-    private void ClearMap()
-    {
-        tilemap.ClearAllTiles();
     }
 
 

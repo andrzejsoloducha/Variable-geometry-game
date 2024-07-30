@@ -1,0 +1,15 @@
+behaviors:
+  QLearningAgent:
+    trainer_type: ppo
+    hyperparameters:
+      batch_size: 16  
+      buffer_size: 512  
+      learning_rate: 1.0e-4 
+      num_epoch: 3  
+    network_settings:
+      normalize: false  
+      hidden_units: 64  
+      num_hidden_layers: 2  
+    max_steps: 1.0e5 
+    time_horizon: 32 
+    summary_freq: 1000  

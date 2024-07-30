@@ -183,16 +183,11 @@ public class GameManager : Singleton<GameManager>
             Debug.Log("WINNER: " + winner);
         }
         
-        if (CurrentPlayer.GetComponent<Player>().team == Team.Red)
-        {
-            PathFinder.CalculatePathsNewRound();
-            OptAlgorithm();
-        }
-        else
-        {
-            PathFinder.CalculatePathsNewRound();
-            OptAlgorithm();
-        }
+        //if (CurrentPlayer.GetComponent<Player>().team == Team.Red)
+        //{
+        //    PathFinder.CalculatePathsNewRound();
+        //    OptAlgorithm();
+        //}
     }
 
     private void MlAlgorithm()
