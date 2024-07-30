@@ -45,6 +45,11 @@ public class GameManager : Singleton<GameManager>
 
     private void Start()
     {
+        StartFreshGame();
+    }
+
+    public void StartFreshGame()
+    {
         var playersArray = GameObject.FindGameObjectsWithTag("Player");
         playersArray[0].GetComponent<Player>().current = true;
         RedTeam.ForEach(el => redQ.Enqueue(el));

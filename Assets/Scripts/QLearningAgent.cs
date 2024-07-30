@@ -29,6 +29,13 @@ public class QLearningAgent : Agent
     public override void CollectObservations(VectorSensor sensor)
     {
         sensor.AddObservation(currentPlayer.transform.position);
+
+        var raySensor = GetComponent<RayPerceptionSensorComponentBase>();
+        var rayObservations = raySensor.GetRayPerceptionInput();
+        foreach (var observation in rayObservations)
+        {
+            sensor.AddObservation(observation);
+        }
         var enemies = GameManager.Instance.Players.FindAll(
             go => go.GetComponent<Player>().team != currentPlayer.GetComponent<Player>().team);
         foreach (var enemy in enemies)

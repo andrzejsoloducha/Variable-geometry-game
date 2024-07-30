@@ -17,6 +17,21 @@ public class PlayerManager : MonoBehaviour
         Respawn();
     }
 
+    public void ResetPlayers()
+    {
+        var playersList = GameManager.Instance.Players;
+        foreach (var player in playersList)
+        {
+            if (player)
+            {
+                Destroy(player);
+            }
+        }
+        
+        FindPlacesToRespawn();
+        Respawn();
+    }
+
     private void FindPlacesToRespawn()
     {
         availablePlaces = new List<Vector3>();

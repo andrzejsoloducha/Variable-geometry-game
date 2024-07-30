@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -23,6 +22,17 @@ public class GenerateMap : MonoBehaviour
         ClearMap();
         var seed = Time.time;
 
+        var map = GenerateArray(width, height, true);
+        map = PerlinNoiseCave(map, Random.Range(0.0001f, 0.4f), true);
+
+        RenderMap(map, tilemap, tile);
+    }
+
+    public void ResetMap()
+    {
+        width = GameManager.Instance.mapWidth;
+        height = GameManager.Instance.mapHeight;
+        ClearMap();
         var map = GenerateArray(width, height, true);
         map = PerlinNoiseCave(map, Random.Range(0.0001f, 0.4f), true);
 
