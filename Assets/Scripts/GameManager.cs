@@ -140,6 +140,8 @@ public class GameManager : Singleton<GameManager>
     // ReSharper disable Unity.PerformanceAnalysis
     public void NextTurnProcedure([CanBeNull] Player kamikaze = null)
     {
+        var qlearningagent = GameObject.Find("QLearningManager").GetComponent<QLearningAgent>();
+        qlearningagent.EndEpisode();
         weaponUsed = false;
         if (BothTeamsActive)
         {

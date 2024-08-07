@@ -30,18 +30,19 @@ public class QLearningAgent : Agent
 
     public override void OnEpisodeBegin()
     {
-        generateMap?.TriggerResetMap();
-        playerManager?.TriggerResetPlayers();
-        GameManager.Instance.StartFreshGame();
+        //generateMap?.TriggerResetMap();
+        //playerManager?.TriggerResetPlayers();
+        //GameManager.Instance.StartFreshGame();
+        generateMap?.TriggerUpdateMap();
         currentPlayer = GameManager.Instance.CurrentPlayer;
         epsilon = Mathf.Max(minEpsilon, epsilon * epsilonDecay);
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        sensor.AddObservation(currentPlayer.transform.position);
+        sensor.AddObservation(GameManager.Instance.CurrentPlayer.transform.position);
         var enemies = GameManager.Instance.Players.FindAll(
-            go => go.GetComponent<Player>().team != currentPlayer.GetComponent<Player>().team);
+            go => go.GetComponent<Player>().team != GameManager.Instance.CurrentPlayer.GetComponent<Player>().team);
         foreach (var enemy in enemies)
         {
             sensor.AddObservation(enemy.transform.position);
@@ -49,6 +50,8 @@ public class QLearningAgent : Agent
         generateMap?.TriggerUpdateMap();
         if (generateMap != null)
         {
+            Debug.Log("code executed!");
+
             var environmentMap = generateMap.map;
             var mapHeight = GameManager.Instance.mapHeight;
             var mapWidth = GameManager.Instance.mapWidth;
