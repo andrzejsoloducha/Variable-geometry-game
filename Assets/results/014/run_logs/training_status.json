@@ -1,0 +1,29 @@
+{
+    "QLearningAgent": {
+        "checkpoints": [
+            {
+                "steps": 0,
+                "file_path": "results\\014\\QLearningAgent\\QLearningAgent-0.onnx",
+                "reward": null,
+                "creation_time": 1723383534.5060718,
+                "auxillary_file_paths": [
+                    "results\\014\\QLearningAgent\\QLearningAgent-0.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 0,
+            "file_path": "results\\014\\QLearningAgent.onnx",
+            "reward": null,
+            "creation_time": 1723383534.5060718,
+            "auxillary_file_paths": [
+                "results\\014\\QLearningAgent\\QLearningAgent-0.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "2.0.1+cpu"
+    }
+}

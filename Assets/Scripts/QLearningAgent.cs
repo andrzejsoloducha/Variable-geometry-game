@@ -19,20 +19,15 @@ public class QLearningAgent : Agent
     private float epsilonDecay = 0.995f;
     private GameObject currentPlayer;
     private GenerateMap generateMap;
-    private PlayerManager playerManager;
 
 
     private void Start()
     {
         generateMap = FindObjectOfType<GenerateMap>();
-        playerManager = FindObjectOfType<PlayerManager>();
     }
 
     public override void OnEpisodeBegin()
     {
-        //generateMap?.TriggerResetMap();
-        //playerManager?.TriggerResetPlayers();
-        //GameManager.Instance.StartFreshGame();
         generateMap?.TriggerUpdateMap();
         currentPlayer = GameManager.Instance.CurrentPlayer;
         epsilon = Mathf.Max(minEpsilon, epsilon * epsilonDecay);

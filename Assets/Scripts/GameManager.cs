@@ -39,17 +39,23 @@ public class GameManager : Singleton<GameManager>
         .FindAll(player => player.team == Team.Blue);
 
     public bool weaponUsed;
-
+    private GenerateMap generateMap;
+    private PlayerManager playerManager;
+    
     private Queue<Player> redQ = new();
     private Queue<Player> blueQ = new();
 
     private void Start()
     {
         StartFreshGame();
+        generateMap = FindObjectOfType<GenerateMap>();
+        playerManager = FindObjectOfType<PlayerManager>();
     }
 
     public void StartFreshGame()
     {
+        generateMap?.TriggerResetMap();
+        playerManager?.TriggerResetPlayers();
         var playersArray = GameObject.FindGameObjectsWithTag("Player");
         playersArray[0].GetComponent<Player>().current = true;
         RedTeam.ForEach(el => redQ.Enqueue(el));
@@ -141,8 +147,8 @@ public class GameManager : Singleton<GameManager>
     public void NextTurnProcedure([CanBeNull] Player kamikaze = null)
     {
         var qlearningagent = GameObject.Find("QLearningManager").GetComponent<QLearningAgent>();
-        qlearningagent.EndEpisode();
         weaponUsed = false;
+        qlearningagent.EndEpisode();
         if (BothTeamsActive)
         {
             var prevPlayer = kamikaze ? kamikaze : CurrentPlayer.GetComponent<Player>();
@@ -173,6 +179,7 @@ public class GameManager : Singleton<GameManager>
         {
             Debug.Log("END");
 
+
             var score = BlueTeam.Count() - RedTeam.Count();
 
             winner = score switch
@@ -183,6 +190,7 @@ public class GameManager : Singleton<GameManager>
             };
             
             Debug.Log("WINNER: " + winner);
+            StartFreshGame();
         }
         
         //if (CurrentPlayer.GetComponent<Player>().team == Team.Red)
