@@ -54,8 +54,11 @@ public class GameManager : Singleton<GameManager>
 
     public void StartFreshGame()
     {
+        ClearParticleSystem();
         generateMap?.TriggerResetMap();
         playerManager?.TriggerResetPlayers();
+        redQ.Clear();
+        blueQ.Clear();
         var playersArray = GameObject.FindGameObjectsWithTag("Player");
         playersArray[0].GetComponent<Player>().current = true;
         RedTeam.ForEach(el => redQ.Enqueue(el));
@@ -66,6 +69,16 @@ public class GameManager : Singleton<GameManager>
         //OptAlgorithm();
         //(_, _) = PathFinder.FindPathsToEnemies(CurrentPlayer, PlayersComponents);
         //RaycastDetector.DetectEnemiesInSight(CurrentPlayer.transform.position);
+    }
+
+    public void ClearParticleSystem()
+    {
+        var particleSystems = FindObjectsOfType<ParticleSystem>();
+
+        foreach (var ps in particleSystems)
+        {
+            ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        }
     }
 
     private void Update()
@@ -85,6 +98,8 @@ public class GameManager : Singleton<GameManager>
         }
         else
         {
+            var qlearningagent = GameObject.Find("QLearningManager").GetComponent<QLearningAgent>();
+            qlearningagent.EndEpisode();
             AnnounceWinner();
         }
     }
@@ -147,8 +162,8 @@ public class GameManager : Singleton<GameManager>
     public void NextTurnProcedure([CanBeNull] Player kamikaze = null)
     {
         var qlearningagent = GameObject.Find("QLearningManager").GetComponent<QLearningAgent>();
-        weaponUsed = false;
         qlearningagent.EndEpisode();
+        weaponUsed = false;
         if (BothTeamsActive)
         {
             var prevPlayer = kamikaze ? kamikaze : CurrentPlayer.GetComponent<Player>();

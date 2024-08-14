@@ -1,23 +1,24 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Tools;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 public class QLearningAgent : Agent
 {
-    private GameManager gameManager;
     private Dictionary<string, Dictionary<GameObject, float>> QTable = new();
     private float alpha = 0.1f;
     private float gamma = 0.9f;
     private float epsilon = 1.0f;
     private float minEpsilon = 0.1f;
     private float epsilonDecay = 0.995f;
-    private GameObject currentPlayer;
+    public int turnCounter;
     private GenerateMap generateMap;
 
 
@@ -28,8 +29,9 @@ public class QLearningAgent : Agent
 
     public override void OnEpisodeBegin()
     {
-        generateMap?.TriggerUpdateMap();
-        currentPlayer = GameManager.Instance.CurrentPlayer;
+        GameManager.Instance.StartFreshGame();
+        //generateMap?.TriggerUpdateMap();
+        //currentPlayer = GameManager.Instance.CurrentPlayer;
         epsilon = Mathf.Max(minEpsilon, epsilon * epsilonDecay);
     }
 
@@ -81,7 +83,7 @@ public class QLearningAgent : Agent
         var currentTeam = GameManager.Instance.CurrentPlayer.GetComponent<Player>().team;
         var enemies = GameManager.Instance.Players.FindAll(
             go => go.GetComponent<Player>().team != currentTeam);
-
+        var currentPlayer = GameManager.Instance.CurrentPlayer;
         var stateKey = GetStateKey(currentPlayer, enemies);
 
         if (Random.value < epsilon)
@@ -100,7 +102,6 @@ public class QLearningAgent : Agent
         {
             return QTable[stateKey].OrderByDescending(kvp => kvp.Value).First().Key;
         }
-
         return null;
     }
 
@@ -123,10 +124,11 @@ public class QLearningAgent : Agent
                 return;
             }
         }
-        
         var reward = TakeAction(selectedTarget);
+        Debug.Log("Reward collected: " + reward);
         AddReward(reward);
         UpdateQTable(selectedTarget, reward);
+        EndEpisode();
     }
 
 
@@ -135,7 +137,7 @@ public class QLearningAgent : Agent
         var currentTeam = GameManager.Instance.CurrentPlayer.GetComponent<Player>().team;
         var enemies = GameManager.Instance.Players.FindAll(
             go => go.GetComponent<Player>().team != currentTeam);
-        
+        var currentPlayer = GameManager.Instance.CurrentPlayer;
         var stateKey = GetStateKey(currentPlayer, enemies);
         if (!QTable.ContainsKey(stateKey))
         {
@@ -167,15 +169,17 @@ public class QLearningAgent : Agent
     private float TakeAction(GameObject selectedTarget)
     {
         float enemyHealth = selectedTarget.GetComponent<Player>().Health;
-        GameManager.Instance.ShootTarget(selectedTarget);
-        float enemyHealthAfterDamage = selectedTarget.GetComponent<Player>().Health;
-        var healthLost = enemyHealth - enemyHealthAfterDamage;
+        //GameManager.Instance.ShootTarget(selectedTarget);
+        var healthLost = DmgCalculator.CalculateBulletDamage(
+            GameManager.Instance.CurrentPlayer.transform.position,
+            selectedTarget.transform.position);
         var reward = Math.Max(0, Math.Min(1, healthLost / enemyHealth));
+        turnCounter += 1;
         if (healthLost <= 0)
         {
             return -1;
         }
-
+        GameManager.Instance.ClearParticleSystem();
         return reward;
     }
 }

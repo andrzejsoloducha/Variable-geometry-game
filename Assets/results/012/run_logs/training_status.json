@@ -2,22 +2,22 @@
     "QLearningAgent": {
         "checkpoints": [
             {
-                "steps": 0,
-                "file_path": "results\\012\\QLearningAgent\\QLearningAgent-0.onnx",
-                "reward": null,
-                "creation_time": 1723047232.7016196,
+                "steps": 2,
+                "file_path": "results\\012\\QLearningAgent\\QLearningAgent-2.onnx",
+                "reward": -2.0,
+                "creation_time": 1723401071.6857703,
                 "auxillary_file_paths": [
-                    "results\\012\\QLearningAgent\\QLearningAgent-0.pt"
+                    "results\\012\\QLearningAgent\\QLearningAgent-2.pt"
                 ]
             }
         ],
         "final_checkpoint": {
-            "steps": 0,
+            "steps": 2,
             "file_path": "results\\012\\QLearningAgent.onnx",
-            "reward": null,
-            "creation_time": 1723047232.7016196,
+            "reward": -2.0,
+            "creation_time": 1723401071.6857703,
             "auxillary_file_paths": [
-                "results\\012\\QLearningAgent\\QLearningAgent-0.pt"
+                "results\\012\\QLearningAgent\\QLearningAgent-2.pt"
             ]
         }
     },

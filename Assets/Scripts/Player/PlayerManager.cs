@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
@@ -37,12 +38,9 @@ public class PlayerManager : MonoBehaviour
     private void ResetPlayers(object sender, EventArgs e)
     {
         var playersList = GameManager.Instance.Players;
-        foreach (var player in playersList)
+        foreach (var player in playersList.Where(player => player))
         {
-            if (player)
-            {
-                Destroy(player);
-            }
+            Destroy(player);
         }
         
         FindPlacesToRespawn();
@@ -107,6 +105,10 @@ public class PlayerManager : MonoBehaviour
 
                 players.Add(playerObject);
                 availablePlaces.RemoveAt(index);
+                if (i == 0)
+                {
+                    playerComponent.current = true;
+                }
             }
             else
             {
