@@ -47,8 +47,6 @@ public class QLearningAgent : Agent
         generateMap?.TriggerUpdateMap();
         if (generateMap != null)
         {
-            Debug.Log("code executed!");
-
             var environmentMap = generateMap.map;
             var mapHeight = GameManager.Instance.mapHeight;
             var mapWidth = GameManager.Instance.mapWidth;
@@ -65,7 +63,7 @@ public class QLearningAgent : Agent
         }
         else
         {
-            Debug.LogWarning("generate map is null there, fix it!");
+            Debug.LogError("map not found!");
         }
     }
 
